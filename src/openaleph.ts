@@ -1,5 +1,6 @@
 import { App, requestUrl } from 'obsidian';
 import { Entity, Model, defaultModel } from '@opensanctions/followthemoney';
+import { searchMockData } from './openalephMock';
 
 const SCHEMA_TYPE_SET = new Set(Object.keys(defaultModel.schemata));
 
@@ -239,28 +240,7 @@ class FakeClient implements OpenAlephClient {
 	}
 
 	async instanceSearch(): Promise<SearchResult> {
-		const model = new Model(defaultModel);
-		return new Promise((resolve) => {
-			resolve({
-				status: 'ok',
-				total: 2,
-				results: [
-					model.getEntity({
-						caption: 'Mr James Colin Moriarty',
-						schema: 'Person',
-						id: 'gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368',
-					}),
-					model.getEntity({
-						caption: 'MICHAEL JAMES MORIARTY',
-						schema: 'Person',
-						id: 'us-npi-1518447499.6bc3ff871054bac37403bcbfa5ed070d9c4cf702',
-					}),
-				],
-				next: new URL(
-					'https://search.openaleph.org/api/2/entities?offset=2&limit=2&q=James+Moriarty',
-				),
-			});
-		});
+		return (await searchMockData()) as SearchResult;
 	}
 
 	async search(_query: SearchEndpoint): Promise<FederatedSearchResults> {
