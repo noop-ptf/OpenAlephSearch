@@ -210,8 +210,10 @@ async function canConnect(instanceUrl: string, apiKey: string | null) {
 		url: url.toString(),
 		headers,
 	};
+	console.log(request);
 	try {
 		const res = await requestUrl(request);
+		console.log(res);
 		// throws if the body isn't valid JSON
 		const body = res.json as unknown;
 		// 0, false or "" are valid JSON

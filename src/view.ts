@@ -2,6 +2,7 @@ import { ItemView, Notice, WorkspaceLeaf } from 'obsidian';
 import {
 	SearchEndpoint as OpenAlephSearch,
 	default as openAlephClientFactory,
+	writeNote,
 } from './openaleph';
 import OpenAlephPlugin from './main';
 
@@ -128,7 +129,12 @@ export class OpenAlephSearchView extends ItemView {
 						text: 'Import as note',
 					});
 					importBtn.onclick = async () => {
-						//  TODO
+						await writeNote(
+							entry,
+							this.plugin.settings.importFolder,
+							'search.openaleph.org',
+							this.plugin,
+						);
 					};
 				}
 			}

@@ -1,4 +1,4 @@
-import { App, requestUrl } from 'obsidian';
+import { App, requestUrl, stringifyYaml } from 'obsidian';
 import { Entity, Model, defaultModel } from '@opensanctions/followthemoney';
 import { searchMockData } from './openalephMock';
 
@@ -259,6 +259,61 @@ class FakeClient implements OpenAlephClient {
 			resultsForInstance,
 		};
 	}
+}
+
+// Note export
+export async function writeNote(
+	entity: Entity,
+	ftmdFolder: string,
+	instanceFolder: string,
+	plugin,
+) {
+	// TODO: entity.dataset isn't part of Entity, if I get it right, because Entity is a StatementEntity,
+	// whereas the search results from OpenAleph are of type ValueEntity.
+	//
+	// How to deal with this inconsistency on the typing side?
+	const dataset = entity.dataset ?? 'unknown';
+	const path = `${ftmdFolder}/${instanceFolder}/${dataset}`;
+	plugin.app.vault.createFolder(path).catch((err) => {
+		console.log('[debug] Folder already existed. All good.');
+	});
+
+	// Flattening the parts of entity that are interesting to us.
+	//
+	// TODO: This code is super hacky and it shows that the FtM entity
+	// hasn't been parsed correctly. Maybe we don't need to do that, but
+	// I'll think about that some other time.
+	let flatEntity = {
+		schema: entity.schema,
+		id: entity.id,
+	};
+	for (const [k, v] of Object.entries(entity.properties)) {
+		if (v.length === 0) {
+			flatEntity[k] = '';
+		} else if (v.length === 1) {
+			if (typeof v[0] === 'string') {
+				flatEntity[k] = v[0];
+			}
+		} else {
+			// TODO: make sure we only have string types in v
+			flatEntity[k] = v;
+		}
+	}
+	const fileContent = `---\n${stringifyYaml(flatEntity)}---\n`;
+
+	// TODO: if id matches, force to overwrite it, for now? => so we need to read it first!
+	const targetFile = await plugin.app.vault
+		.create(`${path}/${entity.caption}.md`, fileContent)
+		.catch((_err) =>
+			console.log('[debug] File already exists. Doing nothing for now.'),
+		);
+	const activeLeaf = plugin.app.workspace.getLeaf(false);
+	if (!activeLeaf) {
+		console.warn('MDB | no active leaf, not opening newly created note');
+	}
+	await activeLeaf.openFile(targetFile, {
+		state: { mode: 'source' },
+	});
 }
 
 // Configures whether we want a fake static result for development or the real thing
