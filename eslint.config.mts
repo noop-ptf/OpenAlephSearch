@@ -31,7 +31,7 @@ export default defineConfig(
 	...obsidianmd.configs.recommended,
 	// TODO: Remove this once we get more towards something release-worthy.
 	{
-		files: ['**/*.ts'],
+		files: ['**/*.ts', '**/*.tsx'],
 		rules: {
 			'no-console': 'off',
 			'obsidianmd/rule-custom-message': 'off',

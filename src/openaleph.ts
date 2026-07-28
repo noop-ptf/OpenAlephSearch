@@ -1,5 +1,6 @@
 import { App, requestUrl, stringifyYaml } from 'obsidian';
-import { Entity, Model, defaultModel } from '@opensanctions/followthemoney';
+import OpenAlephPlugin from './main';
+import { Entity, defaultModel } from '@opensanctions/followthemoney';
 import { searchMockData } from './openalephMock';
 
 const SCHEMA_TYPE_SET = new Set(Object.keys(defaultModel.schemata));
@@ -18,8 +19,13 @@ export interface SearchResult {
 	next: URL;
 }
 
+interface InstanceMetadata {
+	name: string;
+}
+
 export interface FederatedSearchResults {
 	resultsForInstance: { [id: string]: SearchResult };
+	instanceMetadata: { [id: string]: InstanceMetadata };
 	total: number;
 }
 
@@ -188,17 +194,20 @@ class HttpClient implements OpenAlephClient {
 	async search(endpoint: SearchEndpoint): Promise<FederatedSearchResults> {
 		let total = 0;
 		let resultsForInstance: { [id: string]: SearchResult } = {};
+		let instanceMetadata: { [id: string]: InstanceMetadata } = {};
 
 		for (let [instanceId, settings] of Object.entries(this.settingsById)) {
 			if (settings.enabled) {
 				const results = await this.instanceSearch(endpoint, instanceId);
 				total += results.total;
 				resultsForInstance[instanceId] = results;
+				instanceMetadata[instanceId] = { name: settings.name };
 			}
 		}
 		return {
 			total,
 			resultsForInstance,
+			instanceMetadata,
 		};
 	}
 
@@ -246,17 +255,20 @@ class FakeClient implements OpenAlephClient {
 	async search(_query: SearchEndpoint): Promise<FederatedSearchResults> {
 		let total = 0;
 		let resultsForInstance: { [id: string]: SearchResult } = {};
+		let instanceMetadata: { [id: string]: InstanceMetadata } = {};
 
 		for (let [instanceId, settings] of Object.entries(this.settingsById)) {
 			if (settings.enabled) {
 				const results = await this.instanceSearch();
 				total += results.total;
 				resultsForInstance[instanceId] = results;
+				instanceMetadata[instanceId] = { name: settings.name };
 			}
 		}
 		return {
 			total,
 			resultsForInstance,
+			instanceMetadata,
 		};
 	}
 }
@@ -266,7 +278,7 @@ export async function writeNote(
 	entity: Entity,
 	ftmdFolder: string,
 	instanceFolder: string,
-	plugin,
+	plugin: OpenAlephPlugin,
 ) {
 	// TODO: entity.dataset isn't part of Entity, if I get it right, because Entity is a StatementEntity,
 	// whereas the search results from OpenAleph are of type ValueEntity.
@@ -302,18 +314,24 @@ export async function writeNote(
 	const fileContent = `---\n${stringifyYaml(flatEntity)}---\n`;
 
 	// TODO: if id matches, force to overwrite it, for now? => so we need to read it first!
-	const targetFile = await plugin.app.vault
-		.create(`${path}/${entity.caption}.md`, fileContent)
-		.catch((_err) =>
-			console.log('[debug] File already exists. Doing nothing for now.'),
+	try {
+		const targetFile = await plugin.app.vault.create(
+			`${path}/${entity.caption}.md`,
+			fileContent,
 		);
-	const activeLeaf = plugin.app.workspace.getLeaf(false);
-	if (!activeLeaf) {
-		console.warn('MDB | no active leaf, not opening newly created note');
+		const activeLeaf = plugin.app.workspace.getLeaf(false);
+		if (!activeLeaf) {
+			console.warn(
+				'MDB | no active leaf, not opening newly created note',
+			);
+		}
+		await activeLeaf.openFile(targetFile, {
+			state: { mode: 'source' },
+		});
+	} catch (_err) {
+		// TODO: turn this into a notice?
+		console.log('[debug] File already exists. Doing nothing for now.');
 	}
-	await activeLeaf.openFile(targetFile, {
-		state: { mode: 'source' },
-	});
 }
 
 // Configures whether we want a fake static result for development or the real thing
