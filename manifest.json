@@ -1,9 +1,9 @@
 {
-	"id": "obsidian-opal",
-	"name": "OpenAleph",
+	"id": "obsidian-opal-search",
+	"name": "OpenAleph Search",
 	"version": "1.0.0",
 	"minAppVersion": "1.7.2",
-	"description": "Some experiments with OpenAleph API.",
+	"description": "Some experiments with OpenAleph Search API.",
 	"author": "noop",
 	"isDesktopOnly": false
 }

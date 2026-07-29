@@ -1,4 +1,4 @@
-# OpenAlelph Experimental Plugin
+# OpenAleph Search Experimental Plugin
 
 ## Getting Started
 
@@ -14,3 +14,10 @@
 ## API Documentation
 
 See https://docs.obsidian.md
+
+## Sponsor
+
+OpenAleph Search: an Obsidian Plug-in is funded by the German **Federal Ministry of Research, Technology and Space (BMFTR)** through the **[Prototype Fund](https://prototypefund.de)** under funding code (Förderkennzeichen) **16IS26S15**.
+
+<img src="assets/bmftr-funding.png" alt="Funded by the German Federal Ministry of Research, Technology and Space (BMFTR)" width="200">
+<img src="assets/prototype-fund-en.png" alt="Funded through the Prototype Fund" width="200">
