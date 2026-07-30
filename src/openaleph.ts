@@ -4,6 +4,7 @@ import { Entity, defaultModel } from '@opensanctions/followthemoney';
 import { searchMockData } from './openalephMock';
 
 const SCHEMA_TYPE_SET = new Set(Object.keys(defaultModel.schemata));
+export const SCHEMA_TYPES = Array.from(Object.keys(defaultModel.schemata));
 
 export function isSchemaType(value: string): boolean {
 	return SCHEMA_TYPE_SET.has(value);

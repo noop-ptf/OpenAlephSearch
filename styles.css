@@ -100,3 +100,9 @@
 .instance-connection-invalid svg {
     color: var(--color-red);
 }
+
+.my-popover {
+	margin: 0;
+	inset: unset;
+	border: 0;
+}
