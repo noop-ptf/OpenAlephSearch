@@ -66,6 +66,18 @@ export const SearchSidebar = ({
 		}
 	}
 
+	async function loadMore(instanceId: string) {
+		const ClientFactory = openAlephClientFactory();
+		const apiClient = new ClientFactory(pluginSettings, app);
+		if (searchResults !== undefined) {
+			await apiClient.loadMoreForInstance(
+				setSearchResults,
+				searchResults,
+				instanceId,
+			);
+		}
+	}
+
 	function handleFacetToggle(key: string, value: boolean) {
 		setFacets({ ...facets, [key]: value });
 	}
@@ -93,18 +105,9 @@ export const SearchSidebar = ({
 							plugin,
 						)
 					}
+					loadMore={loadMore}
 				/>
 			)}
 		</>
 	);
 };
-/*
-  const positionElement = (elementRef, targetRef) => {
-  const targetRect = targetRef.current.getBoundingClientRect();
-  const elementRect = elementRef.current.getBoundingClientRect();
-
-  // Position elementRef directly below targetRef
-  elementRef.current.style.position = 'absolute';
-  elementRef.current.style.top = `${targetRect.bottom}px`;
-  elementRef.current.style.left = `${targetRect.left}px`;
-};*/

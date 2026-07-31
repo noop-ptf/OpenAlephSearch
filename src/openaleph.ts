@@ -1,7 +1,11 @@
 import { App, requestUrl, stringifyYaml } from 'obsidian';
 import OpenAlephPlugin from './main';
 import { Entity, defaultModel } from '@opensanctions/followthemoney';
-import { searchMockData } from './openalephMock';
+import {
+	moriartyPageOne,
+	moriartyPageTwo,
+	searchMockData,
+} from './openalephMock';
 
 const SCHEMA_TYPE_SET = new Set(Object.keys(defaultModel.schemata));
 export const SCHEMA_TYPES = Array.from(Object.keys(defaultModel.schemata));
@@ -30,10 +34,6 @@ export interface FederatedSearchResults {
 	total: number;
 }
 
-export interface Paginated<T> {
-	next(): Promise<Paginated<T>>;
-}
-
 export interface OpenAlephPluginSettings {
 	importFolder: string;
 	instances: OpenAlephInstanceSettings[];
@@ -53,6 +53,11 @@ export interface OpenAlephClient {
 	search(query: SearchEndpoint): Promise<FederatedSearchResults>;
 	// instanceStatus(): Promise<string>;
 	settingsById: { [id: string]: OpenAlephInstanceSettings };
+	loadMoreForInstance(
+		setter: any,
+		currentResults: FederatedSearchResults,
+		instanceId: string,
+	): Promise<void>;
 }
 
 type Method = 'GET' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -110,23 +115,6 @@ export class SearchEndpoint implements Endpoint {
 		return {};
 	}
 }
-
-// export class PaginatedSearchResult implements Paginated<SearchResult> {
-// 	client: OpenAlephClient;
-// 	result: SearchResult;
-//
-// 	constructor(client: OpenAlephClient, result: SearchResult) {
-// 		this.client = client;
-// 		this.result = result;
-// 	}
-//
-// 	async next(): Promise<PaginatedSearchResult> {
-// 		return new PaginatedSearchResult(
-// 			this.client,
-// 			(await this.client.request(this.result.next)) as SearchResult,
-// 		);
-// 	}
-// }
 
 class HttpClient implements OpenAlephClient {
 	REST_API = '/api/2/';
@@ -212,6 +200,12 @@ class HttpClient implements OpenAlephClient {
 		};
 	}
 
+	async loadMoreForInstance(
+		_setter: any,
+		_currentResults: FederatedSearchResults,
+		_instanceId: string,
+	): Promise<void> {}
+
 	// metadataUrl(instanceId): URL {
 	// 	return new URL(
 	// 		`${this.REST_API}/${this.METADATA_ENDPOINT}`,
@@ -249,7 +243,10 @@ class FakeClient implements OpenAlephClient {
 		}
 	}
 
-	async instanceSearch(): Promise<SearchResult> {
+	async instanceSearch(instanceId: string): Promise<SearchResult> {
+		if (instanceId.startsWith('f1cd')) {
+			return (await moriartyPageOne()) as SearchResult;
+		}
 		return (await searchMockData()) as SearchResult;
 	}
 
@@ -260,7 +257,7 @@ class FakeClient implements OpenAlephClient {
 
 		for (let [instanceId, settings] of Object.entries(this.settingsById)) {
 			if (settings.enabled) {
-				const results = await this.instanceSearch();
+				const results = await this.instanceSearch(instanceId);
 				total += results.total;
 				resultsForInstance[instanceId] = results;
 				instanceMetadata[instanceId] = { name: settings.name };
@@ -271,6 +268,37 @@ class FakeClient implements OpenAlephClient {
 			resultsForInstance,
 			instanceMetadata,
 		};
+	}
+
+	async loadMoreForInstance(
+		setter: any,
+		previousResults: FederatedSearchResults,
+		instanceId: string,
+	): Promise<void> {
+		console.log(`loading more from ${instanceId}...`);
+		const nextUrl = previousResults?.resultsForInstance[instanceId]?.next;
+		if (nextUrl === null || nextUrl === undefined) {
+			console.log('Error!');
+			return;
+		}
+		const nextPage = (await moriartyPageTwo()) as SearchResult;
+		setter((prev) => {
+			const prevInstanceResult = prev.resultsForInstance[instanceId];
+			const updatedInstanceResult = {
+				...prevInstanceResult,
+				results: [...prevInstanceResult.results, ...nextPage.results],
+				total: nextPage.total,
+				next: nextPage.next,
+				status: nextPage.status,
+			};
+			return {
+				...prev,
+				resultsForInstance: {
+					...prev.resultsForInstance,
+					[instanceId]: updatedInstanceResult,
+				},
+			};
+		});
 	}
 }
 

@@ -5,10 +5,12 @@ export const InstanceResults = ({
 	name,
 	results,
 	writeNote,
+	loadMore,
 }: {
 	name: string;
 	results: SearchResult;
 	writeNote: (entity: SearchResult['results'][0]) => void;
+	loadMore: () => void;
 }) => {
 	return (
 		<>
@@ -22,6 +24,9 @@ export const InstanceResults = ({
 					writeNote={() => writeNote(result)}
 				/>
 			))}
+			{results.next && (
+				<button onClick={() => loadMore()}>Load more</button>
+			)}
 		</>
 	);
 };

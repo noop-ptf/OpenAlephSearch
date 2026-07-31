@@ -4,12 +4,14 @@ import { FederatedSearchResults, SearchResult } from '../openaleph';
 export const SearchResults = ({
 	results,
 	writeNote,
+	loadMore,
 }: {
 	results: FederatedSearchResults;
 	writeNote: (
 		// TODO: have a nicer type here
 		entity: SearchResult['results'][0],
 	) => void;
+	loadMore: (instanceId: string) => void;
 }) => {
 	return (
 		<>
@@ -21,7 +23,7 @@ export const SearchResults = ({
 				{Object.entries(results.resultsForInstance).map(
 					([instanceId, instanceResults]) => (
 						<InstanceResults
-							key={instanceId}
+							key={`${instanceId}-results`}
 							name={
 								// TODO: there must be a better way to get the instance name :D
 								results.instanceMetadata[instanceId]?.name ||
@@ -29,6 +31,7 @@ export const SearchResults = ({
 							}
 							results={instanceResults}
 							writeNote={writeNote}
+							loadMore={() => loadMore(instanceId)}
 						/>
 					),
 				)}
