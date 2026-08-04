@@ -25,7 +25,7 @@ export function FacetFilter({ facets, facetLabels, handleToggle }) {
 
 			<div ref={popoverRef} popover="auto" className="my-popover">
 				<div className="menu">
-					<div className="bases-toolbar-menu-container">
+					<div className="bases-toolbar-menu-container openaleph-scroll">
 						{/*<div className="search-input-container mod-raised">
 							<input
 								enterKeyHint="search"

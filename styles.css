@@ -106,3 +106,8 @@
 	inset: unset;
 	border: 0;
 }
+
+.openaleph-scroll {
+	max-height: 75%;
+	overflow-y: scroll;
+}
