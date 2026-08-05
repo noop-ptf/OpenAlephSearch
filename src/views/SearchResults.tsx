@@ -18,7 +18,6 @@ export const SearchResults = ({
 			<div className="openaleph-results">
 				<div className="openaleph-results-total">
 					Found {results.total} results
-					{/* JSON.stringify(results.resultsForInstance)*/}
 				</div>
 				{Object.entries(results.resultsForInstance).map(
 					([instanceId, instanceResults]) => (

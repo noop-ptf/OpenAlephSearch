@@ -1,7 +1,7 @@
 import { Entity } from './Entity';
 import { SearchResult } from '../openaleph';
 
-export const InstanceResults = ({
+export function InstanceResults({
 	name,
 	results,
 	writeNote,
@@ -11,7 +11,8 @@ export const InstanceResults = ({
 	results: SearchResult;
 	writeNote: (entity: SearchResult['results'][0]) => void;
 	loadMore: () => void;
-}) => {
+}) {
+	// console.log(JSON.stringify(results));
 	return (
 		<>
 			{results.results.map((result) => (
@@ -29,4 +30,4 @@ export const InstanceResults = ({
 			)}
 		</>
 	);
-};
+}

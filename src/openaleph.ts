@@ -117,7 +117,7 @@ export class SearchEndpoint implements Endpoint {
 }
 
 class HttpClient implements OpenAlephClient {
-	REST_API = '/api/2/';
+	REST_API = '/api/2';
 	METADATA_ENDPOINT = 'metadata';
 	SEARCH_ENDPOINT = 'search';
 
@@ -133,6 +133,7 @@ class HttpClient implements OpenAlephClient {
 	}
 
 	async request(url: URL, instanceId: string): Promise<unknown> {
+		console.log(url);
 		const settings = this.settingsById[instanceId];
 		if (settings === undefined) {
 			return Promise.reject(
@@ -212,7 +213,7 @@ class HttpClient implements OpenAlephClient {
 			return;
 		}
 		const nextPage = (await this.request(
-			nextUrl,
+			new URL(nextUrl),
 			instanceId,
 		)) as SearchResult;
 		setter((prev) => {

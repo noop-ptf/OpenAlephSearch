@@ -34,17 +34,6 @@ export const SearchSidebar = ({
 	const [facets, setFacets] = useState(initialFacets);
 	async function runSearch(query: string) {
 		console.log(`running search with query: "${query}"`);
-		// const filterForPerson = this.personFilterCheckbox.checked;
-		// if (!query) return;
-		//
-		// // const enabledInstances = this.plugin.settings.instances.filter(
-		// // 	(instance) => instance.enabled,
-		// // );
-		// // if (enabledInstances.length === 0) {
-		// // 	new Notice('There are no enabled OpenAleph instances.');
-		// // 	return;
-		// // }
-		//
 		const ClientFactory = openAlephClientFactory();
 		const apiClient = new ClientFactory(pluginSettings, app);
 		const search = new OpenAlephSearch(query);
