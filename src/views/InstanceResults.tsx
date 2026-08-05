@@ -15,14 +15,13 @@ export function InstanceResults({
 	// console.log(JSON.stringify(results));
 	return (
 		<>
-			{results.results.map((result) => (
+			{results.results.map((entity) => (
 				// TODO: add EntityImportButton as a parallel component here instead?
 				<Entity
-					key={result.id}
+					key={entity.id}
+					entity={entity}
 					instanceName={name}
-					caption={result.caption || 'Unknown'}
-					schema={result.schema?.toString() || 'Thing'}
-					writeNote={() => writeNote(result)}
+					writeNote={() => writeNote(entity)}
 				/>
 			))}
 			{results.next && (

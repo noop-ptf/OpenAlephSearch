@@ -1,17 +1,17 @@
 export const Entity = ({
+	entity,
 	instanceName,
-	caption,
-	schema,
 	writeNote,
 }: {
+	entity: any;
 	instanceName: string;
-	caption: string;
-	schema: string;
 	writeNote: () => void;
 }) => {
+	const caption = entity.caption || 'Unknown';
+	const schema = entity.schema?.toString() || 'Thing';
 	return (
 		<>
-			<div className="openaleph-source-heading">{instanceName}</div>
+			<div className="openaleph-source-heading">{entity.dataset}</div>
 			<div className="openaleph-result-item">
 				<div className="openaleph-result-title">{caption}</div>
 				<div className="openaleph-result-snippet">{schema}</div>
