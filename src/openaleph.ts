@@ -55,7 +55,7 @@ export interface OpenAlephClient {
 	settingsById: { [id: string]: OpenAlephInstanceSettings };
 	loadMoreForInstance(
 		setter: any,
-		currentResults: FederatedSearchResults,
+		previousResults: FederatedSearchResults,
 		instanceId: string,
 	): Promise<void>;
 }
@@ -201,10 +201,38 @@ class HttpClient implements OpenAlephClient {
 	}
 
 	async loadMoreForInstance(
-		_setter: any,
-		_currentResults: FederatedSearchResults,
-		_instanceId: string,
-	): Promise<void> {}
+		setter: any,
+		previousResults: FederatedSearchResults,
+		instanceId: string,
+	): Promise<void> {
+		console.log(`loading more from ${instanceId}...`);
+		const nextUrl = previousResults?.resultsForInstance[instanceId]?.next;
+		if (nextUrl === null || nextUrl === undefined) {
+			console.log('Error!');
+			return;
+		}
+		const nextPage = (await this.request(
+			nextUrl,
+			instanceId,
+		)) as SearchResult;
+		setter((prev) => {
+			const prevInstanceResult = prev.resultsForInstance[instanceId];
+			const updatedInstanceResult = {
+				...prevInstanceResult,
+				results: [...prevInstanceResult.results, ...nextPage.results],
+				total: nextPage.total,
+				next: nextPage.next,
+				status: nextPage.status,
+			};
+			return {
+				...prev,
+				resultsForInstance: {
+					...prev.resultsForInstance,
+					[instanceId]: updatedInstanceResult,
+				},
+			};
+		});
+	}
 
 	// metadataUrl(instanceId): URL {
 	// 	return new URL(
