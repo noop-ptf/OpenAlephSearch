@@ -331,23 +331,7 @@ class FakeClient implements OpenAlephClient {
 	}
 }
 
-// Note export
-export async function writeNote(
-	entity: Entity,
-	ftmdFolder: string,
-	instanceFolder: string,
-	plugin: OpenAlephPlugin,
-) {
-	// TODO: entity.dataset isn't part of Entity, if I get it right, because Entity is a StatementEntity,
-	// whereas the search results from OpenAleph are of type ValueEntity.
-	//
-	// How to deal with this inconsistency on the typing side?
-	const dataset = entity.dataset ?? 'unknown';
-	const path = `${ftmdFolder}/${instanceFolder}/${dataset}`;
-	plugin.app.vault.createFolder(path).catch((err) => {
-		console.log('[debug] Folder already existed. All good.');
-	});
-
+export function yamlifyEntity(entity) {
 	// Flattening the parts of entity that are interesting to us.
 	//
 	// TODO: This code is super hacky and it shows that the FtM entity
@@ -369,7 +353,31 @@ export async function writeNote(
 			flatEntity[k] = v;
 		}
 	}
-	const fileContent = `---\n${stringifyYaml(flatEntity)}---\n`;
+	return `---\n${stringifyYaml(flatEntity)}---\n`;
+}
+
+export function entityImportPath(entity, ftmdFolder, instanceFolder) {
+	// TODO: entity.dataset isn't part of Entity, if I get it right, because Entity is a StatementEntity,
+	// whereas the search results from OpenAleph are of type ValueEntity.
+	//
+	// How to deal with this inconsistency on the typing side?
+	const dataset = entity.dataset ?? 'unknown';
+	return `${ftmdFolder}/${instanceFolder}/${dataset}`;
+}
+
+// Note export
+export async function writeNote(
+	entity: Entity,
+	ftmdFolder: string,
+	instanceFolder: string,
+	plugin: OpenAlephPlugin,
+) {
+	const path = entityImportPath(entity, ftmdFolder, instanceFolder);
+	plugin.app.vault.createFolder(path).catch((err) => {
+		console.log('[debug] Folder already existed. All good.');
+	});
+
+	const fileContent = yamlifyEntity(entity);
 
 	// TODO: if id matches, force to overwrite it, for now? => so we need to read it first!
 	try {

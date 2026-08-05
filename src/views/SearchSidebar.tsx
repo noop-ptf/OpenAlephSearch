@@ -9,10 +9,13 @@ import {
 	default as openAlephClientFactory,
 	SearchResult,
 	writeNote,
+	yamlifyEntity,
+	entityImportPath,
 	OpenAlephPluginSettings,
 	FederatedSearchResults,
 	SCHEMA_TYPES as FTM_SCHEMA_TYPES,
 } from '../openaleph';
+import { ConfirmNoteModal } from '../modals';
 
 const initialFacets = Object.fromEntries(
 	FTM_SCHEMA_TYPES.map((k) => [k, false]),
@@ -85,15 +88,27 @@ export const SearchSidebar = ({
 					writeNote={(
 						// TODO: have a nicer type here
 						entity: SearchResult['results'][0],
-					) =>
-						writeNote(
-							entity,
-							pluginSettings.importFolder,
-							// TODO: change this from being hard-coded
-							'search.openaleph.org',
-							plugin,
-						)
-					}
+					) => {
+						new ConfirmNoteModal(
+							app,
+							entity.caption || 'Unknown',
+							entityImportPath(
+								entity,
+								pluginSettings.importFolder,
+								'search.openaleph.org',
+							),
+							yamlifyEntity(entity),
+							() => {
+								writeNote(
+									entity,
+									pluginSettings.importFolder,
+									// TODO: change this from being hard-coded
+									'search.openaleph.org',
+									plugin,
+								);
+							},
+						).open();
+					}}
 					loadMore={loadMore}
 				/>
 			)}
