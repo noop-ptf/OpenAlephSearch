@@ -1189,10 +1189,10 @@ export async function searchMockData(): Promise<any> {
 								id: 'addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b',
 								writeable: false,
 								links: {
-									self: 'https://search.openaleph.org/api/2/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b',
-									expand: 'https://search.openaleph.org/api/2/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b/expand',
-									tags: 'https://search.openaleph.org/api/2/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b/tags',
-									ui: 'https://search.openaleph.org/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b',
+									self: 'https://next.openaleph.org/api/2/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b',
+									expand: 'https://next.openaleph.org/api/2/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b/expand',
+									tags: 'https://next.openaleph.org/api/2/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b/tags',
+									ui: 'https://next.openaleph.org/entities/addr-585d435b12cc2ee1e670d811bde5817420c6a6e6.89b7f3d75ef187c5b96a30769b180ed0b8be1d1b',
 								},
 								collection: {
 									created_at: '2022-07-09T14:03:54.432156',
@@ -1220,12 +1220,12 @@ export async function searchMockData(): Promise<any> {
 									id: '411',
 									writeable: false,
 									links: {
-										self: 'https://search.openaleph.org/api/2/collections/411',
+										self: 'https://next.openaleph.org/api/2/collections/411',
 										xref_export:
-											'https://search.openaleph.org/api/2/collections/411/xref.xlsx',
+											'https://next.openaleph.org/api/2/collections/411/xref.xlsx',
 										reconcile:
-											'https://search.openaleph.org/api/2/collections/411/reconcile',
-										ui: 'https://search.openaleph.org/datasets/411',
+											'https://next.openaleph.org/api/2/collections/411/reconcile',
+										ui: 'https://next.openaleph.org/datasets/411',
 									},
 									shallow: true,
 									creator: {
@@ -1236,7 +1236,7 @@ export async function searchMockData(): Promise<any> {
 										id: '114',
 										writeable: false,
 										links: {
-											self: 'https://search.openaleph.org/api/2/roles/114',
+											self: 'https://next.openaleph.org/api/2/roles/114',
 										},
 										shallow: true,
 									},
@@ -1248,7 +1248,7 @@ export async function searchMockData(): Promise<any> {
 									is_investigator: false,
 									writeable: false,
 									links: {
-										self: 'https://search.openaleph.org/api/2/roles/114',
+										self: 'https://next.openaleph.org/api/2/roles/114',
 									},
 									shallow: true,
 									id: '114',
@@ -1263,10 +1263,10 @@ export async function searchMockData(): Promise<any> {
 					id: 'gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc',
 					writeable: false,
 					links: {
-						self: 'https://search.openaleph.org/api/2/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc',
-						expand: 'https://search.openaleph.org/api/2/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc/expand',
-						tags: 'https://search.openaleph.org/api/2/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc/tags',
-						ui: 'https://search.openaleph.org/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc',
+						self: 'https://next.openaleph.org/api/2/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc',
+						expand: 'https://next.openaleph.org/api/2/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc/expand',
+						tags: 'https://next.openaleph.org/api/2/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc/tags',
+						ui: 'https://next.openaleph.org/entities/gb-coh-psc-sc618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.89a34b72ce3dbe8c02cc7ad0ba9d60be6fa66bcc',
 					},
 					collection: {
 						created_at: '2022-07-09T14:03:54.432156',
@@ -1292,12 +1292,12 @@ export async function searchMockData(): Promise<any> {
 						count: 28093045,
 						writeable: false,
 						links: {
-							self: 'https://search.openaleph.org/api/2/collections/411',
+							self: 'https://next.openaleph.org/api/2/collections/411',
 							xref_export:
-								'https://search.openaleph.org/api/2/collections/411/xref.xlsx',
+								'https://next.openaleph.org/api/2/collections/411/xref.xlsx',
 							reconcile:
-								'https://search.openaleph.org/api/2/collections/411/reconcile',
-							ui: 'https://search.openaleph.org/datasets/411',
+								'https://next.openaleph.org/api/2/collections/411/reconcile',
+							ui: 'https://next.openaleph.org/datasets/411',
 						},
 						shallow: true,
 						id: '411',
@@ -1309,7 +1309,7 @@ export async function searchMockData(): Promise<any> {
 						is_investigator: false,
 						writeable: false,
 						links: {
-							self: 'https://search.openaleph.org/api/2/roles/114',
+							self: 'https://next.openaleph.org/api/2/roles/114',
 						},
 						shallow: true,
 						id: '114',
@@ -1336,10 +1336,10 @@ export async function searchMockData(): Promise<any> {
 					id: 'gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368',
 					writeable: false,
 					links: {
-						self: 'https://search.openaleph.org/api/2/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368',
-						expand: 'https://search.openaleph.org/api/2/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368/expand',
-						tags: 'https://search.openaleph.org/api/2/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368/tags',
-						ui: 'https://search.openaleph.org/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368',
+						self: 'https://next.openaleph.org/api/2/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368',
+						expand: 'https://next.openaleph.org/api/2/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368/expand',
+						tags: 'https://next.openaleph.org/api/2/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368/tags',
+						ui: 'https://next.openaleph.org/entities/gb-coh-psc-SC618974-u9ffdocvkfhzdsmx1-v1x6fbnyu.4bc2fa11f98c693aaf4d9b27548c201fa962b368',
 					},
 					collection: {
 						created_at: '2022-07-09T14:03:54.432156',
@@ -1365,12 +1365,12 @@ export async function searchMockData(): Promise<any> {
 						count: 28093045,
 						writeable: false,
 						links: {
-							self: 'https://search.openaleph.org/api/2/collections/411',
+							self: 'https://next.openaleph.org/api/2/collections/411',
 							xref_export:
-								'https://search.openaleph.org/api/2/collections/411/xref.xlsx',
+								'https://next.openaleph.org/api/2/collections/411/xref.xlsx',
 							reconcile:
-								'https://search.openaleph.org/api/2/collections/411/reconcile',
-							ui: 'https://search.openaleph.org/datasets/411',
+								'https://next.openaleph.org/api/2/collections/411/reconcile',
+							ui: 'https://next.openaleph.org/datasets/411',
 						},
 						shallow: true,
 						id: '411',

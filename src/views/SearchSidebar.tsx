@@ -89,21 +89,22 @@ export const SearchSidebar = ({
 						// TODO: have a nicer type here
 						entity: SearchResult['results'][0],
 					) => {
+						const instanceHostname = new URL(entity.links.self)
+							.hostname;
 						new ConfirmNoteModal(
 							app,
 							entity.caption || 'Unknown',
 							entityImportPath(
 								entity,
 								pluginSettings.importFolder,
-								'search.openaleph.org',
+								instanceHostname,
 							),
 							yamlifyEntity(entity),
 							() => {
 								writeNote(
 									entity,
 									pluginSettings.importFolder,
-									// TODO: change this from being hard-coded
-									'search.openaleph.org',
+									instanceHostname,
 									plugin,
 								);
 							},
