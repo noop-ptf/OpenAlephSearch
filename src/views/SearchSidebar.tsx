@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { App, Notice } from 'obsidian';
 import { SearchView } from './SearchView';
 import { SearchResults } from './SearchResults';
-import { FacetFilter } from './FacetFilter';
 import OpenAlephPlugin from '../main';
 import {
 	SearchEndpoint as OpenAlephSearch,
@@ -76,11 +75,11 @@ export const SearchSidebar = ({
 
 	return (
 		<>
-			<SearchView runSearch={runSearch} />
-			<FacetFilter
+			<SearchView
+				runSearch={runSearch}
 				facets={facets}
 				facetLabels={facetLabels}
-				handleToggle={handleFacetToggle}
+				handleFacetToggle={handleFacetToggle}
 			/>
 			{searchResults && (
 				<SearchResults

@@ -30,7 +30,7 @@ export class OpenAlephSearchView extends ItemView {
 
 	async onOpen(): Promise<void> {
 		const container = this.contentEl;
-		container.addClass('openaleph-search-container');
+		// container.addClass('openaleph-search-container');
 		this.root = createRoot(container);
 		this.root.render(
 			<StrictMode>
