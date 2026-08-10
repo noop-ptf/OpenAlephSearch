@@ -21,11 +21,6 @@ export const SearchResults = ({
 					([instanceId, instanceResults]) => (
 						<InstanceResults
 							key={`${instanceId}-results`}
-							name={
-								// TODO: there must be a better way to get the instance name :D
-								results.instanceMetadata[instanceId]?.name ||
-								'unknown instance'
-							}
 							results={instanceResults}
 							writeNote={writeNote}
 							loadMore={() => loadMore(instanceId)}

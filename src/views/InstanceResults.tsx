@@ -1,23 +1,21 @@
 import { Entity } from './Entity';
-import { EntityByDataset } from '../openaleph';
+import { InstanceResults as InstanceResultsType } from '../openaleph';
 import { Entity as FtMEntity } from '@opensanctions/followthemoney';
 import { useState } from 'react';
 
 export function InstanceResults({
-	name,
 	results,
 	writeNote,
 	loadMore,
 }: {
-	name: string;
-	results: EntityByDataset;
+	results: InstanceResultsType;
 	writeNote: (entity: FtMEntity) => void;
 	loadMore: () => void;
 }) {
 	// console.log(JSON.stringify(results));
 	const [collapsedIds, setCollapsedIds] = useState(new Set());
 
-	const toggle = (id) =>
+	const toggle = (id: string) =>
 		setCollapsedIds((prev) => {
 			console.log(`toggling ${id}`);
 			const next = new Set(prev);
@@ -26,7 +24,8 @@ export function InstanceResults({
 		});
 	return (
 		<>
-			{[...results.entries()].map(([dataset, entities]) => {
+			<div>{results.name}</div>
+			{[...results.results.entries()].map(([dataset, entities]) => {
 				const numEntities = entities.length;
 				return (
 					<div className="search-results-children" key={dataset.id}>
@@ -61,7 +60,7 @@ export function InstanceResults({
 									</svg>
 								</div>
 								<div className="tree-item-inner">
-									{dataset.name} ({name})
+									{dataset.name}
 								</div>
 								<div className="tree-item-flair-outer">
 									<span className="tree-item-flair">
@@ -71,51 +70,20 @@ export function InstanceResults({
 							</div>
 							{!collapsedIds.has(dataset.id)
 								? entities.map((entity) => (
-										<div
-											className="search-result-file-matches"
+										<Entity
 											key={entity.id}
-										>
-											<div
-												style={{
-													width: '1px',
-													height: '0.1px',
-													marginBottom: '0px',
-												}}
-											></div>
-											<div
-												className="search-result-file-match tappable"
-												onClick={() =>
-													console.log(
-														'Importing note...',
-													)
-												}
-											>
-												<div className="openaleph-result-title">
-													{entity.caption}
-												</div>
-												<div className="openaleph-result-snippet">
-													{entity.schema?.toString()}
-												</div>
-											</div>
-										</div>
+											entity={entity}
+											writeNote={() => writeNote(entity)}
+										/>
 									))
 								: undefined}
 						</div>
 					</div>
 				);
-				// TODO: add EntityImportButton as a parallel component here instead?
-				/*
-				<Entity
-					key={entity.id}
-					entity={entity}
-					instanceName={name}
-					writeNote={() => writeNote(entity)}
-				/>
-				*/
 			})}
-			{/* {results.next && ( */}
-			{/* 	<button onClick={() => loadMore()}>Load more</button> */}
-			{/* )} */}
+			{results.next && (
+				<button onClick={() => loadMore()}>Load more</button>
+			)}
 		</>
 	);
 }
