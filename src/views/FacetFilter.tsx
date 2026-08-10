@@ -1,11 +1,14 @@
 import { useRef } from 'react';
 import { Facet } from './Facet';
+import { type FacetState } from '../openaleph';
 
-export function FacetFilter({ facets, facetLabels, handleToggle }: {
-	facets: any;
-	facetLabels: any;
-	handleToggle: any;
-}) {
+interface FacetFilterProps {
+	facets: FacetState;
+	facetLabels: Record<string, string>;
+	handleToggle: (key: string, value: boolean) => void;
+}
+
+export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterProps) {
 	const buttonRef = useRef<HTMLDivElement>(null);
 	const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -73,9 +76,9 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: {
 							{Object.keys(facets).map((key) => (
 								<Facet
 									key={key}
-									label={facetLabels[key]}
+									label={facetLabels[key] ?? key}
 									value={key}
-									checked={facets[key]}
+									checked={facets[key] ?? false}
 									handleToggle={handleToggle}
 								/>
 							))}

@@ -15,7 +15,7 @@ export function InstanceResults({
 	loadMore: () => void;
 }) {
 	// console.log(JSON.stringify(results));
-	const [collapsedIds, setCollapsedIds] = useState(new Set());
+	const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
 
 	const toggle = (id: string) =>
 		setCollapsedIds((prev) => {

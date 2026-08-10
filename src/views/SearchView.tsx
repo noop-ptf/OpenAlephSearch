@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { FacetFilter } from './FacetFilter';
+import { type FacetState } from '../openaleph';
+
+interface SearchViewProps {
+	runSearch: (query: string) => void;
+	facets: FacetState;
+	facetLabels: Record<string, string>;
+	handleFacetToggle: (key: string, value: boolean) => void;
+}
 
 export const SearchView = ({
 	runSearch,
 	facets,
 	facetLabels,
 	handleFacetToggle,
-}: {
-	runSearch: (query: string) => void;
-	facets: any;
-	facetLabels: any;
-	handleFacetToggle: any;
-}) => {
+}: SearchViewProps) => {
 	// TODO: use placeholder pattern instead of predefined value?
 	const [searchTerm, setSearchTerm] = useState('');
 

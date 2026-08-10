@@ -38,6 +38,8 @@ export interface OpenAlephEntity {
 	referents?: string[];
 }
 
+export type FacetState = Record<string, boolean>;
+
 // TODO: Use OpenAleph API Spec + openapi-typescript instead?
 // seems this could also build us a client:
 // https://openapi-ts.dev/openapi-fetch/
