@@ -6,6 +6,7 @@ import {
 	moriartyPageTwo,
 	searchMockData,
 } from './openalephMock';
+import { group } from 'console';
 
 const SCHEMA_TYPE_SET = new Set(Object.keys(defaultModel.schemata));
 export const SCHEMA_TYPES = Array.from(Object.keys(defaultModel.schemata));
@@ -24,12 +25,20 @@ export interface SearchResult {
 	next: URL;
 }
 
+export interface Dataset {
+	id: string;
+	name: string;
+	instanceId: string;
+}
+
+export type EntityByDataset = Map<Dataset, Entity[]>;
+
 interface InstanceMetadata {
 	name: string;
 }
 
 export interface FederatedSearchResults {
-	resultsForInstance: { [id: string]: SearchResult };
+	resultsForInstance: { [id: string]: EntityByDataset };
 	instanceMetadata: { [id: string]: InstanceMetadata };
 	total: number;
 }
@@ -182,21 +191,41 @@ class HttpClient implements OpenAlephClient {
 
 	async search(endpoint: SearchEndpoint): Promise<FederatedSearchResults> {
 		let total = 0;
-		let resultsForInstance: { [id: string]: SearchResult } = {};
-		let instanceMetadata: { [id: string]: InstanceMetadata } = {};
+		let resultsForInstance: { [id: string]: InstanceResults } = {};
 
-		for (let [instanceId, settings] of Object.entries(this.settingsById)) {
+		for (const [instanceId, settings] of Object.entries(
+			this.settingsById,
+		)) {
 			if (settings.enabled) {
 				const results = await this.instanceSearch(endpoint, instanceId);
 				total += results.total;
-				resultsForInstance[instanceId] = results;
-				instanceMetadata[instanceId] = { name: settings.name };
+				let groupedResults: EntityByDataset = new Map();
+				// dataset ID => Dataset
+				let seenDatasets: Map<string, Dataset> = new Map();
+				for (const entity of results.results) {
+					const datasetId = entity.collection.id;
+					let dataset = seenDatasets.get(datasetId);
+					if (dataset === undefined) {
+						dataset = {
+							id: datasetId,
+							name: entity.collection.name,
+							instanceId: instanceId,
+						};
+						seenDatasets.set(datasetId, dataset);
+						groupedResults.set(dataset, []);
+					}
+					groupedResults.get(dataset)?.push(entity);
+				}
+				resultsForInstance[instanceId] = {
+					name: settings.name,
+					results: groupedResults,
+					next: results.next,
+				};
 			}
 		}
 		return {
 			total,
 			resultsForInstance,
-			instanceMetadata,
 		};
 	}
 
@@ -280,14 +309,33 @@ class FakeClient implements OpenAlephClient {
 
 	async search(_query: SearchEndpoint): Promise<FederatedSearchResults> {
 		let total = 0;
-		let resultsForInstance: { [id: string]: SearchResult } = {};
+		let resultsForInstance: { [id: string]: EntityByDataset } = {};
 		let instanceMetadata: { [id: string]: InstanceMetadata } = {};
 
-		for (let [instanceId, settings] of Object.entries(this.settingsById)) {
+		for (const [instanceId, settings] of Object.entries(
+			this.settingsById,
+		)) {
 			if (settings.enabled) {
 				const results = await this.instanceSearch(instanceId);
 				total += results.total;
-				resultsForInstance[instanceId] = results;
+				let groupedResults: EntityByDataset = new Map();
+				// dataset ID => Dataset
+				let seenDatasets: Map<string, Dataset> = new Map();
+				for (const entity of results.results) {
+					const datasetId = entity.collection.id;
+					let dataset = seenDatasets.get(datasetId);
+					if (dataset === undefined) {
+						dataset = {
+							id: datasetId,
+							name: entity.collection.name,
+							instanceId: instanceId,
+						};
+						seenDatasets.set(datasetId, dataset);
+						groupedResults.set(dataset, []);
+					}
+					groupedResults.get(dataset)?.push(entity);
+				}
+				resultsForInstance[instanceId] = groupedResults;
 				instanceMetadata[instanceId] = { name: settings.name };
 			}
 		}

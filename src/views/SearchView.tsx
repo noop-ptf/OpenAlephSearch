@@ -14,6 +14,7 @@ export const SearchView = ({
 }) => {
 	// TODO: use placeholder pattern instead of predefined value?
 	const [searchTerm, setSearchTerm] = useState('');
+
 	return (
 		<div className="openaleph-search-row">
 			<form
