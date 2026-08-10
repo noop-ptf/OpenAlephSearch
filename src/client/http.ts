@@ -1,13 +1,12 @@
 import { App, requestUrl } from 'obsidian';
 import { type Dispatch, type SetStateAction } from 'react';
+import { SearchEndpoint, type OpenAlephClient } from './endpoint';
 import {
-	type OpenAlephClient,
 	type OpenAlephInstanceSettings,
 	type OpenAlephPluginSettings,
 	type SearchResult,
 	type FederatedSearchResults,
 	type InstanceResults,
-	SearchEndpoint,
 	groupEntitiesByDataset,
 } from '../types';
 
