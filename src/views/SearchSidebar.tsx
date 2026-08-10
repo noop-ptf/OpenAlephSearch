@@ -6,7 +6,7 @@ import OpenAlephPlugin from '../main';
 import {
 	SearchEndpoint as OpenAlephSearch,
 	default as openAlephClientFactory,
-	SearchResult,
+	OpenAlephEntity,
 	writeNote,
 	yamlifyEntity,
 	entityImportPath,
@@ -84,10 +84,7 @@ export const SearchSidebar = ({
 			{searchResults && (
 				<SearchResults
 					results={searchResults}
-					writeNote={(
-						// TODO: have a nicer type here
-						entity: SearchResult['results'][0],
-					) => {
+					writeNote={(entity: OpenAlephEntity) => {
 						const instanceHostname = new URL(entity.links.self)
 							.hostname;
 						new ConfirmNoteModal(

@@ -1,6 +1,6 @@
 import { App, requestUrl, stringifyYaml } from 'obsidian';
 import OpenAlephPlugin from './main';
-import { Entity, defaultModel } from '@opensanctions/followthemoney';
+import { defaultModel } from '@opensanctions/followthemoney';
 import {
 	moriartyPageOne,
 	moriartyPageTwo,
@@ -14,12 +14,35 @@ export function isSchemaType(value: string): boolean {
 	return SCHEMA_TYPE_SET.has(value);
 }
 
+interface Collection {
+	id: string;
+	name: string;
+}
+
+interface Links {
+	self: string;
+	expand: string;
+	tags?: string;
+	ui?: string;
+}
+
+export interface OpenAlephEntity {
+	id: string;
+	caption: string;
+	schema: string;
+	properties: Record<string, string[]>;
+	collection: Collection;
+	links: Links;
+	dataset?: string;
+	referents?: string[];
+}
+
 // TODO: Use OpenAleph API Spec + openapi-typescript instead?
 // seems this could also build us a client:
 // https://openapi-ts.dev/openapi-fetch/
 export interface SearchResult {
 	status: string;
-	results: Entity[];
+	results: OpenAlephEntity[];
 	total: number;
 	next: URL;
 }
@@ -30,7 +53,7 @@ export interface Dataset {
 	instanceId: string;
 }
 
-export type EntityByDataset = Map<Dataset, Entity[]>;
+export type EntityByDataset = Map<Dataset, OpenAlephEntity[]>;
 
 export interface InstanceResults {
 	name: string;
@@ -125,6 +148,28 @@ export class SearchEndpoint implements Endpoint {
 	}
 }
 
+function groupEntitiesByDataset(
+	entities: OpenAlephEntity[],
+	instanceId: string,
+	existing?: EntityByDataset,
+): EntityByDataset {
+	const result: EntityByDataset = existing ?? new Map();
+	const seenDatasets = new Map<string, Dataset>(
+		[...(existing?.keys() ?? [])].map((d) => [d.id, d]),
+	);
+	for (const entity of entities) {
+		const datasetId = entity.collection.id;
+		let dataset = seenDatasets.get(datasetId);
+		if (dataset === undefined) {
+			dataset = { id: datasetId, name: entity.collection.name, instanceId };
+			seenDatasets.set(datasetId, dataset);
+			result.set(dataset, []);
+		}
+		result.get(dataset)?.push(entity);
+	}
+	return result;
+}
+
 class HttpClient implements OpenAlephClient {
 	REST_API = '/api/2';
 	METADATA_ENDPOINT = 'metadata';
@@ -199,34 +244,14 @@ class HttpClient implements OpenAlephClient {
 			if (settings.enabled) {
 				const results = await this.instanceSearch(endpoint, instanceId);
 				total += results.total;
-				let groupedResults: EntityByDataset = new Map();
-				// dataset ID => Dataset
-				let seenDatasets: Map<string, Dataset> = new Map();
-				for (const entity of results.results) {
-					const datasetId = entity.collection.id;
-					let dataset = seenDatasets.get(datasetId);
-					if (dataset === undefined) {
-						dataset = {
-							id: datasetId,
-							name: entity.collection.name,
-							instanceId: instanceId,
-						};
-						seenDatasets.set(datasetId, dataset);
-						groupedResults.set(dataset, []);
-					}
-					groupedResults.get(dataset)?.push(entity);
-				}
 				resultsForInstance[instanceId] = {
 					name: settings.name,
-					results: groupedResults,
+					results: groupEntitiesByDataset(results.results, instanceId),
 					next: results.next,
 				};
 			}
 		}
-		return {
-			total,
-			resultsForInstance,
-		};
+		return { total, resultsForInstance };
 	}
 
 	async loadMoreForInstance(
@@ -234,30 +259,31 @@ class HttpClient implements OpenAlephClient {
 		previousResults: FederatedSearchResults,
 		instanceId: string,
 	): Promise<void> {
-		console.log(`loading more from ${instanceId}...`);
 		const nextUrl = previousResults?.resultsForInstance[instanceId]?.next;
 		if (nextUrl === null || nextUrl === undefined) {
-			console.log('Error!');
 			return;
 		}
 		const nextPage = (await this.request(
 			new URL(nextUrl),
 			instanceId,
 		)) as SearchResult;
-		setter((prev) => {
+		setter((prev: FederatedSearchResults | undefined) => {
+			if (prev === undefined) return prev;
 			const prevInstanceResult = prev.resultsForInstance[instanceId];
-			const updatedInstanceResult = {
-				...prevInstanceResult,
-				results: [...prevInstanceResult.results, ...nextPage.results],
-				total: nextPage.total,
-				next: nextPage.next,
-				status: nextPage.status,
-			};
+			if (prevInstanceResult === undefined) return prev;
 			return {
 				...prev,
 				resultsForInstance: {
 					...prev.resultsForInstance,
-					[instanceId]: updatedInstanceResult,
+					[instanceId]: {
+						...prevInstanceResult,
+						results: groupEntitiesByDataset(
+							nextPage.results,
+							instanceId,
+							prevInstanceResult.results,
+						),
+						next: nextPage.next,
+					},
 				},
 			};
 		});
@@ -317,34 +343,14 @@ class FakeClient implements OpenAlephClient {
 			if (settings.enabled) {
 				const results = await this.instanceSearch(instanceId);
 				total += results.total;
-				let groupedResults: EntityByDataset = new Map();
-				// dataset ID => Dataset
-				let seenDatasets: Map<string, Dataset> = new Map();
-				for (const entity of results.results) {
-					const datasetId = entity.collection.id;
-					let dataset = seenDatasets.get(datasetId);
-					if (dataset === undefined) {
-						dataset = {
-							id: datasetId,
-							name: entity.collection.name,
-							instanceId: instanceId,
-						};
-						seenDatasets.set(datasetId, dataset);
-						groupedResults.set(dataset, []);
-					}
-					groupedResults.get(dataset)?.push(entity);
-				}
 				resultsForInstance[instanceId] = {
 					name: settings.name,
-					results: groupedResults,
+					results: groupEntitiesByDataset(results.results, instanceId),
 					next: results.next,
 				};
 			}
 		}
-		return {
-			total,
-			resultsForInstance,
-		};
+		return { total, resultsForInstance };
 	}
 
 	async loadMoreForInstance(
@@ -352,40 +358,36 @@ class FakeClient implements OpenAlephClient {
 		previousResults: FederatedSearchResults,
 		instanceId: string,
 	): Promise<void> {
-		console.log(`loading more from ${instanceId}...`);
 		const nextUrl = previousResults?.resultsForInstance[instanceId]?.next;
 		if (nextUrl === null || nextUrl === undefined) {
-			console.log('Error!');
 			return;
 		}
 		const nextPage = (await moriartyPageTwo()) as SearchResult;
-		setter((prev) => {
+		setter((prev: FederatedSearchResults | undefined) => {
+			if (prev === undefined) return prev;
 			const prevInstanceResult = prev.resultsForInstance[instanceId];
-			const updatedInstanceResult = {
-				...prevInstanceResult,
-				results: [...prevInstanceResult.results, ...nextPage.results],
-				total: nextPage.total,
-				next: nextPage.next,
-				status: nextPage.status,
-			};
+			if (prevInstanceResult === undefined) return prev;
 			return {
 				...prev,
 				resultsForInstance: {
 					...prev.resultsForInstance,
-					[instanceId]: updatedInstanceResult,
+					[instanceId]: {
+						...prevInstanceResult,
+						results: groupEntitiesByDataset(
+							nextPage.results,
+							instanceId,
+							prevInstanceResult.results,
+						),
+						next: nextPage.next,
+					},
 				},
 			};
 		});
 	}
 }
 
-export function yamlifyEntity(entity) {
-	// Flattening the parts of entity that are interesting to us.
-	//
-	// TODO: This code is super hacky and it shows that the FtM entity
-	// hasn't been parsed correctly. Maybe we don't need to do that, but
-	// I'll think about that some other time.
-	let flatEntity = {
+export function yamlifyEntity(entity: OpenAlephEntity): string {
+	const flatEntity: Record<string, string | string[]> = {
 		schema: entity.schema,
 		id: entity.id,
 	};
@@ -393,29 +395,26 @@ export function yamlifyEntity(entity) {
 		if (v.length === 0) {
 			flatEntity[k] = '';
 		} else if (v.length === 1) {
-			if (typeof v[0] === 'string') {
-				flatEntity[k] = v[0];
-			}
+			flatEntity[k] = v[0] ?? '';
 		} else {
-			// TODO: make sure we only have string types in v
 			flatEntity[k] = v;
 		}
 	}
 	return `---\n${stringifyYaml(flatEntity)}---\n`;
 }
 
-export function entityImportPath(entity, ftmdFolder, instanceFolder) {
-	// TODO: entity.dataset isn't part of Entity, if I get it right, because Entity is a StatementEntity,
-	// whereas the search results from OpenAleph are of type ValueEntity.
-	//
-	// How to deal with this inconsistency on the typing side?
+export function entityImportPath(
+	entity: OpenAlephEntity,
+	ftmdFolder: string,
+	instanceFolder: string,
+): string {
 	const dataset = entity.dataset ?? 'unknown';
 	return `${ftmdFolder}/${instanceFolder}/${dataset}`;
 }
 
 // Note export
 export async function writeNote(
-	entity: Entity,
+	entity: OpenAlephEntity,
 	ftmdFolder: string,
 	instanceFolder: string,
 	plugin: OpenAlephPlugin,

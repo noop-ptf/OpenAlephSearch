@@ -1,6 +1,5 @@
 import { InstanceResults } from './InstanceResults';
-import { FederatedSearchResults } from '../openaleph';
-import { Entity } from '@opensanctions/followthemoney';
+import { FederatedSearchResults, OpenAlephEntity } from '../openaleph';
 
 export const SearchResults = ({
 	results,
@@ -8,7 +7,7 @@ export const SearchResults = ({
 	loadMore,
 }: {
 	results: FederatedSearchResults;
-	writeNote: (entity: Entity) => void;
+	writeNote: (entity: OpenAlephEntity) => void;
 	loadMore: (instanceId: string) => void;
 }) => {
 	return (

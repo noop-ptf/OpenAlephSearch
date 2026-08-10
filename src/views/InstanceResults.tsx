@@ -1,6 +1,8 @@
 import { Entity } from './Entity';
-import { InstanceResults as InstanceResultsType } from '../openaleph';
-import { Entity as FtMEntity } from '@opensanctions/followthemoney';
+import {
+	InstanceResults as InstanceResultsType,
+	OpenAlephEntity,
+} from '../openaleph';
 import { useState } from 'react';
 
 export function InstanceResults({
@@ -9,7 +11,7 @@ export function InstanceResults({
 	loadMore,
 }: {
 	results: InstanceResultsType;
-	writeNote: (entity: FtMEntity) => void;
+	writeNote: (entity: OpenAlephEntity) => void;
 	loadMore: () => void;
 }) {
 	// console.log(JSON.stringify(results));

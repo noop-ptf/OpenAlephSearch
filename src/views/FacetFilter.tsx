@@ -1,14 +1,20 @@
 import { useRef } from 'react';
 import { Facet } from './Facet';
 
-export function FacetFilter({ facets, facetLabels, handleToggle }) {
-	const buttonRef = useRef(null);
-	const popoverRef = useRef(null);
+export function FacetFilter({ facets, facetLabels, handleToggle }: {
+	facets: any;
+	facetLabels: any;
+	handleToggle: any;
+}) {
+	const buttonRef = useRef<HTMLDivElement>(null);
+	const popoverRef = useRef<HTMLDivElement>(null);
 
 	const openPopover = () => {
-		const rect = buttonRef.current.getBoundingClientRect();
+		const button = buttonRef.current;
 		const popover = popoverRef.current;
+		if (!button || !popover) return;
 
+		const rect = button.getBoundingClientRect();
 		// position it ourselves — popover attribute doesn't do this part
 		popover.style.position = 'fixed';
 		popover.style.top = `${rect.bottom + 4}px`;

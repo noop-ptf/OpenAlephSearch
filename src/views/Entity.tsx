@@ -1,8 +1,10 @@
+import { OpenAlephEntity } from '../openaleph';
+
 export const Entity = ({
 	entity,
 	writeNote,
 }: {
-	entity: any;
+	entity: OpenAlephEntity;
 	writeNote: () => void;
 }) => {
 	const caption = entity.caption || 'Unknown';
