@@ -1,6 +1,7 @@
-import { App, requestUrl, stringifyYaml } from 'obsidian';
+import { App, Notice, requestUrl, stringifyYaml } from 'obsidian';
 import OpenAlephPlugin from './main';
 import { defaultModel } from '@opensanctions/followthemoney';
+import { type Dispatch, type SetStateAction } from 'react';
 import {
 	moriartyPageOne,
 	moriartyPageTwo,
@@ -86,7 +87,7 @@ export interface OpenAlephClient {
 	// instanceStatus(): Promise<string>;
 	settingsById: { [id: string]: OpenAlephInstanceSettings };
 	loadMoreForInstance(
-		setter: any,
+		setter: Dispatch<SetStateAction<FederatedSearchResults | undefined>>,
 		previousResults: FederatedSearchResults,
 		instanceId: string,
 	): Promise<void>;
@@ -255,7 +256,7 @@ class HttpClient implements OpenAlephClient {
 	}
 
 	async loadMoreForInstance(
-		setter: any,
+		setter: Dispatch<SetStateAction<FederatedSearchResults | undefined>>,
 		previousResults: FederatedSearchResults,
 		instanceId: string,
 	): Promise<void> {
@@ -354,7 +355,7 @@ class FakeClient implements OpenAlephClient {
 	}
 
 	async loadMoreForInstance(
-		setter: any,
+		setter: Dispatch<SetStateAction<FederatedSearchResults | undefined>>,
 		previousResults: FederatedSearchResults,
 		instanceId: string,
 	): Promise<void> {
@@ -434,16 +435,12 @@ export async function writeNote(
 		);
 		const activeLeaf = plugin.app.workspace.getLeaf(false);
 		if (!activeLeaf) {
-			console.warn(
-				'MDB | no active leaf, not opening newly created note',
-			);
+			new Notice('Could not open note: no active leaf');
+			return;
 		}
-		await activeLeaf.openFile(targetFile, {
-			state: { mode: 'source' },
-		});
+		await activeLeaf.openFile(targetFile, { state: { mode: 'source' } });
 	} catch (_err) {
-		// TODO: turn this into a notice?
-		console.log('[debug] File already exists. Doing nothing for now.');
+		new Notice('A note for this entity already exists.');
 	}
 }
 
