@@ -11,15 +11,20 @@ import {
 } from '../types';
 
 export abstract class BaseClient implements OpenAlephClient {
-	settingsById: { [id: string]: OpenAlephInstanceSettings };
+	private settings: OpenAlephPluginSettings;
 	app: App;
 
 	constructor(settings: OpenAlephPluginSettings, app: App) {
 		this.app = app;
-		this.settingsById = {};
-		for (const instance of settings.instances) {
-			this.settingsById[instance.id] = instance;
+		this.settings = settings;
+	}
+
+	get settingsById(): { [id: string]: OpenAlephInstanceSettings } {
+		const map: { [id: string]: OpenAlephInstanceSettings } = {};
+		for (const instance of this.settings.instances) {
+			map[instance.id] = instance;
 		}
+		return map;
 	}
 
 	protected abstract instanceSearch(
@@ -36,13 +41,18 @@ export abstract class BaseClient implements OpenAlephClient {
 		let total = 0;
 		const resultsForInstance: { [id: string]: InstanceResults } = {};
 
-		for (const [instanceId, settings] of Object.entries(this.settingsById)) {
+		for (const [instanceId, settings] of Object.entries(
+			this.settingsById,
+		)) {
 			if (settings.enabled) {
 				const results = await this.instanceSearch(endpoint, instanceId);
 				total += results.total;
 				resultsForInstance[instanceId] = {
 					name: settings.name,
-					results: groupEntitiesByDataset(results.results, instanceId),
+					results: groupEntitiesByDataset(
+						results.results,
+						instanceId,
+					),
 					next: results.next,
 				};
 			}
