@@ -23,7 +23,7 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 			'--popover-left': `${rect.left}px`,
 		});
 
-		popover.showPopover(); // or togglePopover()
+		popover.showPopover();
 	};
 
 	return (
@@ -52,27 +52,23 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 					</svg>
 				</span>
 				<span className="text-button-label">Filter</span>
-				<span
-					className="flair toolbar-badge"
-					style={{ display: 'none' }}
-				>
-					0
-				</span>
 			</div>
 
 			<div ref={popoverRef} popover="auto" className="openaleph-facet-popover">
-				<div className="menu">
-					<div className="bases-toolbar-menu-container openaleph-facet-list">
-						{/*<div className="search-input-container mod-raised">
-							<input
-								enterKeyHint="search"
-								type="search"
-								spellCheck="false"
-								placeholder="Find or create..."
-							></input>
-						</div>*/}
-						<fieldset>
-							<legend>Select Schema filters:</legend>
+				<div className="menu-scroll openaleph-facet-list">
+					<div className="bases-toolbar-menu-container">
+						<div className="bases-toolbar-items">
+							<div className="suggestion-item bases-toolbar-menu-item openaleph-facet-clear">
+								<button
+									onClick={() =>
+										Object.keys(facets).forEach((key) =>
+											handleToggle(key, false),
+										)
+									}
+								>
+									Clear all
+								</button>
+							</div>
 							{Object.keys(facets).map((key) => (
 								<Facet
 									key={key}
@@ -82,7 +78,7 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 									handleToggle={handleToggle}
 								/>
 							))}
-						</fieldset>
+						</div>
 					</div>
 				</div>
 			</div>

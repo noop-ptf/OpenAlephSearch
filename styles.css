@@ -71,6 +71,9 @@
     position: fixed;
     top: var(--popover-top);
     left: var(--popover-left);
+    background-color: var(--background-primary);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-l);
 }
 
 .openaleph-facet-list {
