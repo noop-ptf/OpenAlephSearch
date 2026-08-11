@@ -41,7 +41,8 @@ const context = await esbuild.context({
 	minify: prod,
 	define: {
 		// default to fake API for initial prototyping phase, but never in prod.
-		'USE_FAKE_API': prod ? 'false' : (process.env.FAKE_API === 'false' ? 'false' : 'true')
+		// 'USE_FAKE_API': prod ? 'false' : (process.env.FAKE_API === 'false' ? 'false' : 'true')
+		'USE_FAKE_API': 'false'
 	},
 });
 
