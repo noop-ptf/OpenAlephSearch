@@ -1,7 +1,11 @@
 import { SearchEndpoint } from './endpoint';
 import { type SearchResult } from '../types';
 import { BaseClient } from './base';
-import { moriartyPageOne, moriartyPageTwo, searchMockData } from '../openalephMock';
+import {
+	moriartyPageOne,
+	moriartyPageTwo,
+	searchMockData,
+} from '../openalephMock';
 
 export class FakeClient extends BaseClient {
 	protected async instanceSearch(

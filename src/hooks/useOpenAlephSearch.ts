@@ -13,7 +13,8 @@ export function useOpenAlephSearch(
 	pluginSettings: OpenAlephPluginSettings,
 	app: App,
 ) {
-	const [searchResults, setSearchResults] = useState<FederatedSearchResults>();
+	const [searchResults, setSearchResults] =
+		useState<FederatedSearchResults>();
 	const [facets, setFacets] = useState<FacetState>(() =>
 		Object.fromEntries(SCHEMA_TYPES.map((k) => [k, false])),
 	);

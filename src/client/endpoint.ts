@@ -5,6 +5,7 @@ import {
 	type OpenAlephInstanceSettings,
 	type FederatedSearchResults,
 	type OpenAlephPluginSettings,
+	EXCLUDED_SCHEMA_TYPES,
 } from '../types';
 
 type Method = 'GET' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -43,6 +44,9 @@ export class SearchEndpoint implements Endpoint {
 	parameters(): URLSearchParams {
 		const params = new URLSearchParams();
 		params.append('q', this.query);
+		EXCLUDED_SCHEMA_TYPES.forEach((schema) =>
+			params.append('exclude:schema', schema),
+		);
 		this.schemaFilter.forEach((schema) =>
 			params.append('filter:schema', schema),
 		);

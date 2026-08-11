@@ -1,7 +1,23 @@
 import { defaultModel } from '@opensanctions/followthemoney';
 
 const SCHEMA_TYPE_SET = new Set(Object.keys(defaultModel.schemata));
-export const SCHEMA_TYPES = Array.from(Object.keys(defaultModel.schemata));
+// We aren't interested in these specific Schema Types in Obsidian, due to their size/shape/unstructuredness.
+export const EXCLUDED_SCHEMA_TYPES = new Set([
+	'Article',
+	'Audio',
+	'Email',
+	'File',
+	'Folder',
+	'Image',
+	'Page',
+	'Pages',
+	'Table',
+	'Video',
+	'Workbook',
+]);
+export const SCHEMA_TYPES = Array.from(
+	Object.keys(defaultModel.schemata),
+).filter((k) => !EXCLUDED_SCHEMA_TYPES.has(k));
 
 export function isSchemaType(value: string): boolean {
 	return SCHEMA_TYPE_SET.has(value);
@@ -83,7 +99,8 @@ export function groupEntitiesByDataset(
 	instanceId: string,
 	existing?: EntityByDataset,
 ): EntityByDataset {
-	const result: EntityByDataset = existing ?? new Map<Dataset, OpenAlephEntity[]>();
+	const result: EntityByDataset =
+		existing ?? new Map<Dataset, OpenAlephEntity[]>();
 	const seenDatasets = new Map<string, Dataset>(
 		[...(existing?.keys() ?? [])].map((d) => [d.id, d]),
 	);
