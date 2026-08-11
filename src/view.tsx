@@ -30,7 +30,6 @@ export class OpenAlephSearchView extends ItemView {
 
 	async onOpen(): Promise<void> {
 		const container = this.contentEl;
-		// container.addClass('openaleph-search-container');
 		this.root = createRoot(container);
 		this.root.render(
 			<StrictMode>
@@ -41,14 +40,6 @@ export class OpenAlephSearchView extends ItemView {
 				/>
 			</StrictMode>,
 		);
-		// const facetDummy = container.createDiv({ cls: 'openaleph-facets' });
-		// const personFilter = facetDummy.createEl('label', {
-		// 	// eslint-disable-next-line obsidianmd/ui/sentence-case -- This is in proper sentence case.
-		// 	attr: { title: 'Filter for Person' },
-		// });
-		// this.personFilterCheckbox = personFilter.createEl('input', {
-		// 	type: 'checkbox',
-		// });
 	}
 
 	async onClose(): Promise<void> {

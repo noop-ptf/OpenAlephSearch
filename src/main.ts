@@ -13,14 +13,11 @@ export interface ResizableSidebarSplit {
 }
 
 export default class OpenAlephPlugin extends Plugin {
-	// openAlephClient!: OpenAlephClient;
 	settings!: OpenAlephPluginSettings;
 
 	async onload() {
 		await this.loadSettings();
-		// await this.initOpenAleph();
 
-		// The second argument to registerView() is a factory function that returns an instance of the view you want to register.
 		this.registerView(
 			VIEW_TYPE_OPENALEPH_SEARCH,
 			(leaf) => new OpenAlephSearchView(leaf, this),
@@ -52,18 +49,11 @@ export default class OpenAlephPlugin extends Plugin {
 			callback: () => this.activateView(),
 		});
 
-		// implement a Test for connections in Settings
-		// const statusBarItemEl = this.addStatusBarItem();
-		// statusBarItemEl.setText(
-		// 	`Connection to OpenAleph API: ${await this.openAlephClient.instanceStatus()}`,
-		// );
-
 		this.addSettingTab(new OpenAlephSettingTab(this.app, this));
 	}
 
 	onunload() {}
 
-	// implementation from obsidian-sample-plugin
 	async loadSettings() {
 		this.settings = Object.assign(
 			{},
@@ -72,7 +62,6 @@ export default class OpenAlephPlugin extends Plugin {
 		);
 	}
 
-	// implementation from obsidian-sample-plugin
 	async saveSettings() {
 		await this.saveData(this.settings);
 	}
@@ -92,7 +81,6 @@ export default class OpenAlephPlugin extends Plugin {
 			});
 		}
 
-		// two assertions, as per TypeScript doc https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
 		const leftSplit =
 			workspace.leftSplit as unknown as ResizableSidebarSplit;
 
