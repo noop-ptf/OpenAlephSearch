@@ -28,7 +28,6 @@ export function entityImportPath(
 	return `${ftmdFolder}/${instanceFolder}/${dataset}`;
 }
 
-// TODO: if id matches, force to overwrite it => read first, then overwrite
 export async function writeNote(
 	entity: OpenAlephEntity,
 	ftmdFolder: string,
@@ -36,24 +35,22 @@ export async function writeNote(
 	plugin: OpenAlephPlugin,
 ): Promise<void> {
 	const path = entityImportPath(entity, ftmdFolder, instanceFolder);
-	plugin.app.vault.createFolder(path).catch(() => {
-		console.log('[debug] Folder already existed. All good.');
-	});
-
+	const filePath = `${path}/${entity.caption}.md`;
 	const fileContent = yamlifyEntity(entity);
 
-	try {
-		const targetFile = await plugin.app.vault.create(
-			`${path}/${entity.caption}.md`,
-			fileContent,
-		);
-		const activeLeaf = plugin.app.workspace.getLeaf(false);
-		if (!activeLeaf) {
-			new Notice('Could not open note: no active leaf');
-			return;
-		}
-		await activeLeaf.openFile(targetFile, { state: { mode: 'source' } });
-	} catch (_err) {
-		new Notice('A note for this entity already exists.');
+	plugin.app.vault.createFolder(path).catch(() => {
+		// folder already exists, ignore
+	});
+
+	const existingFile = plugin.app.vault.getFileByPath(filePath);
+	const targetFile = existingFile
+		? await plugin.app.vault.modify(existingFile, fileContent).then(() => existingFile)
+		: await plugin.app.vault.create(filePath, fileContent);
+
+	const activeLeaf = plugin.app.workspace.getLeaf(false);
+	if (!activeLeaf) {
+		new Notice('Could not open note: no active leaf');
+		return;
 	}
+	await activeLeaf.openFile(targetFile, { state: { mode: 'source' } });
 }

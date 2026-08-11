@@ -9,7 +9,7 @@ export * from './endpoint';
 
 export default function openAlephClientFactory(): OpenAlephConstructor {
 	if (USE_FAKE_API) {
-		console.info('using FAKE API');
+		// development-only mode indicator
 	}
 	return USE_FAKE_API ? FakeClient : HttpClient;
 }

@@ -116,6 +116,9 @@
 	margin: 0;
 	inset: unset;
 	border: 0;
+	position: fixed;
+	top: var(--popover-top);
+	left: var(--popover-left);
 }
 
 .openaleph-scroll {

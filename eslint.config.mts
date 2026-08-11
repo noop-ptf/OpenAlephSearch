@@ -29,12 +29,11 @@ export default defineConfig(
 		},
 	},
 	...obsidianmd.configs.recommended,
-	// TODO: Remove this once we get more towards something release-worthy.
 	{
 		files: ['**/*.ts', '**/*.tsx'],
 		rules: {
-			'no-console': 'off',
-			'obsidianmd/rule-custom-message': 'off',
+			// Allow inline eslint-disable for legitimate cases (e.g. product names
+			// in sentence-case checks, intentional declarative-settings opt-out).
 			'eslint-comments/no-restricted-disable': 'off',
 		},
 	},

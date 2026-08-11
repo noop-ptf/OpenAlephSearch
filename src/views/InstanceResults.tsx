@@ -14,12 +14,10 @@ export function InstanceResults({
 	writeNote: (entity: OpenAlephEntity) => void;
 	loadMore: () => void;
 }) {
-	// console.log(JSON.stringify(results));
 	const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
 
 	const toggle = (id: string) =>
 		setCollapsedIds((prev) => {
-			console.log(`toggling ${id}`);
 			const next = new Set(prev);
 			next.has(id) ? next.delete(id) : next.add(id);
 			return next;

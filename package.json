@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-openaleph-search",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Search OpenAleph instances and import entities as notes in Obsidian",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

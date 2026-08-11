@@ -72,3 +72,4 @@ export class ConfirmNoteModal extends Modal {
 		this.contentEl.empty();
 	}
 }
+/* eslint-enable obsidianmd/ui/sentence-case -- re-enable after modal UI strings */

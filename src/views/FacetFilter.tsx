@@ -18,10 +18,10 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 		if (!button || !popover) return;
 
 		const rect = button.getBoundingClientRect();
-		// position it ourselves — popover attribute doesn't do this part
-		popover.style.position = 'fixed';
-		popover.style.top = `${rect.bottom + 4}px`;
-		popover.style.left = `${rect.left}px`;
+		popover.setCssProps({
+			'--popover-top': `${rect.bottom + 4}px`,
+			'--popover-left': `${rect.left}px`,
+		});
 
 		popover.showPopover(); // or togglePopover()
 	};

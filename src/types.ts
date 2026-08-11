@@ -80,7 +80,7 @@ export function groupEntitiesByDataset(
 	instanceId: string,
 	existing?: EntityByDataset,
 ): EntityByDataset {
-	const result: EntityByDataset = existing ?? new Map();
+	const result: EntityByDataset = existing ?? new Map<Dataset, OpenAlephEntity[]>();
 	const seenDatasets = new Map<string, Dataset>(
 		[...(existing?.keys() ?? [])].map((d) => [d.id, d]),
 	);

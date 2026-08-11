@@ -33,7 +33,7 @@ export const SearchSidebar = ({
 	return (
 		<>
 			<SearchView
-				runSearch={runSearch}
+				runSearch={(q) => { void runSearch(q); }}
 				facets={facets}
 				facetLabels={facetLabels}
 				handleFacetToggle={handleFacetToggle}
@@ -54,7 +54,7 @@ export const SearchSidebar = ({
 							),
 							yamlifyEntity(entity),
 							() => {
-								writeNote(
+								void writeNote(
 									entity,
 									pluginSettings.importFolder,
 									instanceHostname,
@@ -63,7 +63,7 @@ export const SearchSidebar = ({
 							},
 						).open();
 					}}
-					loadMore={loadMore}
+					loadMore={(instanceId) => { void loadMore(instanceId); }}
 				/>
 			)}
 		</>
