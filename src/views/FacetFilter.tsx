@@ -60,9 +60,9 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 				</span>
 			</div>
 
-			<div ref={popoverRef} popover="auto" className="my-popover">
+			<div ref={popoverRef} popover="auto" className="openaleph-facet-popover">
 				<div className="menu">
-					<div className="bases-toolbar-menu-container openaleph-scroll">
+					<div className="bases-toolbar-menu-container openaleph-facet-list">
 						{/*<div className="search-input-container mod-raised">
 							<input
 								enterKeyHint="search"
