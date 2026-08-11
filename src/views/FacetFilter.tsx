@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
+import { setIcon } from 'obsidian';
 import { Facet } from './Facet';
 import { type FacetState } from '../openaleph';
 
@@ -11,6 +12,21 @@ interface FacetFilterProps {
 export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterProps) {
 	const buttonRef = useRef<HTMLDivElement>(null);
 	const popoverRef = useRef<HTMLDivElement>(null);
+	const iconRef = useRef<HTMLSpanElement>(null);
+	const clearIconRef = useRef<HTMLSpanElement>(null);
+	const selectIconRef = useRef<HTMLSpanElement>(null);
+
+	useEffect(() => {
+		if (iconRef.current) {
+			setIcon(iconRef.current, 'list-filter');
+		}
+		if (clearIconRef.current) {
+			setIcon(clearIconRef.current, 'eraser');
+		}
+		if (selectIconRef.current) {
+			setIcon(selectIconRef.current, 'check-check');
+		}
+	}, []);
 
 	const openPopover = () => {
 		const button = buttonRef.current;
@@ -33,40 +49,31 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 				ref={buttonRef}
 				onClick={openPopover}
 			>
-				<span className="text-button-icon">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth={2}
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						className="svg-icon lucide-list-filter"
-					>
-						<path d="M2 5h20"></path>
-						<path d="M6 12h12"></path>
-						<path d="M9 19h6"></path>
-					</svg>
-				</span>
-				<span className="text-button-label">Filter</span>
+				<span className="text-button-icon" ref={iconRef} />
 			</div>
 
 			<div ref={popoverRef} popover="auto" className="openaleph-facet-popover">
 				<div className="menu-scroll openaleph-facet-list">
 					<div className="bases-toolbar-menu-container">
 						<div className="bases-toolbar-items">
-							<div className="suggestion-item bases-toolbar-menu-item openaleph-facet-clear">
-								<button
+							<div className="suggestion-item openaleph-facet-clear">
+								<button className="openaleph-button"
 									onClick={() =>
 										Object.keys(facets).forEach((key) =>
 											handleToggle(key, false),
 										)
 									}
 								>
-									Clear all
+									<span ref={clearIconRef} />
+								</button>
+								<button className="openaleph-button"
+									onClick={() =>
+										Object.keys(facets).forEach((key) =>
+											handleToggle(key, true),
+										)
+									}
+								>
+									<span ref={selectIconRef} />
 								</button>
 							</div>
 							{Object.keys(facets).map((key) => (

@@ -80,3 +80,27 @@
     max-height: 75vh;
     overflow-y: scroll;
 }
+
+.openaleph-facet-clear {
+    display: flex;
+    align-items: center;
+    padding: var(--size-2-2) var(--size-2-2);
+    padding-inline-start: var(--size-2-3);
+    border-radius: var(--radius-s);
+    corner-shape: var(--corner-shape);
+    gap: var(--size-4-2);
+    width: 100%;
+}
+
+.openaleph-button {
+    background-color: transparent;
+    color: var(--text-normal);
+    border-radius: var(--radius-s);
+    padding: var(--size-4-2);
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.openaleph-button:hover {
+    background-color: var(--background-modifier-hover);
+}
