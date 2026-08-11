@@ -1,30 +1,10 @@
-import { App, requestUrl } from 'obsidian';
-import { type Dispatch, type SetStateAction } from 'react';
-import { SearchEndpoint, type OpenAlephClient } from './endpoint';
-import {
-	type OpenAlephInstanceSettings,
-	type OpenAlephPluginSettings,
-	type SearchResult,
-	type FederatedSearchResults,
-	type InstanceResults,
-	groupEntitiesByDataset,
-} from '../types';
+import { requestUrl } from 'obsidian';
+import { SearchEndpoint } from './endpoint';
+import { type SearchResult } from '../types';
+import { BaseClient } from './base';
 
-export class HttpClient implements OpenAlephClient {
+export class HttpClient extends BaseClient {
 	REST_API = '/api/2';
-	METADATA_ENDPOINT = 'metadata';
-	SEARCH_ENDPOINT = 'search';
-
-	settingsById: { [id: string]: OpenAlephInstanceSettings };
-	app: App;
-
-	constructor(settings: OpenAlephPluginSettings, app: App) {
-		this.app = app;
-		this.settingsById = {};
-		for (const instance of settings.instances) {
-			this.settingsById[instance.id] = instance;
-		}
-	}
 
 	async request(url: URL, instanceId: string): Promise<unknown> {
 		const settings = this.settingsById[instanceId];
@@ -54,7 +34,7 @@ export class HttpClient implements OpenAlephClient {
 		return url;
 	}
 
-	async instanceSearch(
+	protected async instanceSearch(
 		endpoint: SearchEndpoint,
 		instanceId: string,
 	): Promise<SearchResult> {
@@ -65,56 +45,13 @@ export class HttpClient implements OpenAlephClient {
 		)) as SearchResult;
 	}
 
-	async search(endpoint: SearchEndpoint): Promise<FederatedSearchResults> {
-		let total = 0;
-		const resultsForInstance: { [id: string]: InstanceResults } = {};
-
-		for (const [instanceId, settings] of Object.entries(this.settingsById)) {
-			if (settings.enabled) {
-				const results = await this.instanceSearch(endpoint, instanceId);
-				total += results.total;
-				resultsForInstance[instanceId] = {
-					name: settings.name,
-					results: groupEntitiesByDataset(results.results, instanceId),
-					next: results.next,
-				};
-			}
-		}
-		return { total, resultsForInstance };
-	}
-
-	async loadMoreForInstance(
-		setter: Dispatch<SetStateAction<FederatedSearchResults | undefined>>,
-		previousResults: FederatedSearchResults,
+	protected async fetchNextPage(
+		nextUrl: string,
 		instanceId: string,
-	): Promise<void> {
-		const nextUrl = previousResults?.resultsForInstance[instanceId]?.next;
-		if (nextUrl === null || nextUrl === undefined) {
-			return;
-		}
-		const nextPage = (await this.request(
+	): Promise<SearchResult> {
+		return (await this.request(
 			new URL(nextUrl),
 			instanceId,
 		)) as SearchResult;
-		setter((prev) => {
-			if (prev === undefined) return prev;
-			const prevInstanceResult = prev.resultsForInstance[instanceId];
-			if (prevInstanceResult === undefined) return prev;
-			return {
-				...prev,
-				resultsForInstance: {
-					...prev.resultsForInstance,
-					[instanceId]: {
-						...prevInstanceResult,
-						results: groupEntitiesByDataset(
-							nextPage.results,
-							instanceId,
-							prevInstanceResult.results,
-						),
-						next: nextPage.next,
-					},
-				},
-			};
-		});
 	}
 }
