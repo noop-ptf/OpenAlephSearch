@@ -22,6 +22,15 @@ export function InstanceResults({
 			next.has(id) ? next.delete(id) : next.add(id);
 			return next;
 		});
+
+	const hasResults = [...results.results.values()].some(
+		(entities) => entities.length > 0,
+	);
+
+	if (!hasResults) {
+		return null;
+	}
+
 	return (
 		<>
 			<div>{results.name}</div>
@@ -70,12 +79,12 @@ export function InstanceResults({
 							</div>
 							{!collapsedIds.has(dataset.id)
 								? entities.map((entity) => (
-										<Entity
-											key={entity.id}
-											entity={entity}
-											writeNote={() => writeNote(entity)}
-										/>
-									))
+									<Entity
+										key={entity.id}
+										entity={entity}
+										writeNote={() => writeNote(entity)}
+									/>
+								))
 								: undefined}
 						</div>
 					</div>
