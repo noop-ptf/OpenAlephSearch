@@ -30,9 +30,9 @@ export class FakeClient implements OpenAlephClient {
 
 	async instanceSearch(instanceId: string): Promise<SearchResult> {
 		if (instanceId.startsWith('f1cd')) {
-			return (await moriartyPageOne()) as SearchResult;
+			return moriartyPageOne();
 		}
-		return (await searchMockData()) as SearchResult;
+		return searchMockData();
 	}
 
 	async search(_query: SearchEndpoint): Promise<FederatedSearchResults> {
@@ -62,7 +62,7 @@ export class FakeClient implements OpenAlephClient {
 		if (nextUrl === null || nextUrl === undefined) {
 			return;
 		}
-		const nextPage = (await moriartyPageTwo()) as SearchResult;
+		const nextPage = await moriartyPageTwo();
 		setter((prev) => {
 			if (prev === undefined) return prev;
 			const prevInstanceResult = prev.resultsForInstance[instanceId];

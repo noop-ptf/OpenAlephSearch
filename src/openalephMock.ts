@@ -1,4 +1,6 @@
-export async function moriartyPageOne(): Promise<any> {
+import { type SearchResult } from './types';
+
+export async function moriartyPageOne(): Promise<SearchResult> {
 	return new Promise((resolve) => {
 		resolve({
 			status: 'ok',
@@ -672,7 +674,7 @@ export async function moriartyPageOne(): Promise<any> {
 	});
 }
 
-export async function moriartyPageTwo(): Promise<any> {
+export async function moriartyPageTwo(): Promise<SearchResult> {
 	return new Promise((resolve) => {
 		resolve({
 			status: 'ok',
@@ -1156,7 +1158,7 @@ export async function moriartyPageTwo(): Promise<any> {
 		});
 	});
 }
-export async function searchMockData(): Promise<any> {
+export async function searchMockData(): Promise<SearchResult> {
 	return new Promise((resolve) => {
 		resolve({
 			status: 'ok',

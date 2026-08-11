@@ -10,24 +10,26 @@ export function isSchemaType(value: string): boolean {
 interface Collection {
 	id: string;
 	name: string;
+	[key: string]: unknown;
 }
 
 interface Links {
 	self: string;
 	expand: string;
-	tags?: string;
-	ui?: string;
+	[key: string]: unknown;
 }
 
 export interface OpenAlephEntity {
 	id: string;
 	caption: string;
 	schema: string;
-	properties: Record<string, string[]>;
+	// Values can be strings or nested entity objects for linked properties.
+	properties: Record<string, unknown[]>;
 	collection: Collection;
 	links: Links;
 	dataset?: string;
 	referents?: string[];
+	[key: string]: unknown;
 }
 
 export type FacetState = Record<string, boolean>;
@@ -39,7 +41,8 @@ export interface SearchResult {
 	status: string;
 	results: OpenAlephEntity[];
 	total: number;
-	next: URL;
+	next: string | null;
+	[key: string]: unknown;
 }
 
 export interface Dataset {
@@ -53,7 +56,7 @@ export type EntityByDataset = Map<Dataset, OpenAlephEntity[]>;
 export interface InstanceResults {
 	name: string;
 	results: EntityByDataset;
-	next: URL;
+	next: string | null;
 }
 
 export interface FederatedSearchResults {

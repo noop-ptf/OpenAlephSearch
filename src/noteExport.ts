@@ -8,13 +8,9 @@ export function yamlifyEntity(entity: OpenAlephEntity): string {
 		id: entity.id,
 	};
 	for (const [k, v] of Object.entries(entity.properties)) {
-		if (v.length === 0) {
-			flatEntity[k] = '';
-		} else if (v.length === 1) {
-			flatEntity[k] = v[0] ?? '';
-		} else {
-			flatEntity[k] = v;
-		}
+		const strings = v.filter((x): x is string => typeof x === 'string');
+		if (strings.length === 0) continue;
+		flatEntity[k] = strings.length === 1 ? (strings[0] ?? '') : strings;
 	}
 	return `---\n${stringifyYaml(flatEntity)}---\n`;
 }
