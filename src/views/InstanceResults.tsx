@@ -69,7 +69,7 @@ export function InstanceResults({
 									</svg>
 								</div>
 								<div className="tree-item-inner">
-									{dataset.name}
+									{dataset.label}
 								</div>
 								<div className="tree-item-flair-outer">
 									<span className="tree-item-flair">

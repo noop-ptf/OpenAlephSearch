@@ -26,7 +26,7 @@ export function isSchemaType(value: string): boolean {
 
 interface Collection {
 	id: string;
-	name: string;
+	label: string;
 	[key: string]: unknown;
 }
 
@@ -64,7 +64,7 @@ export interface SearchResult {
 
 export interface Dataset {
 	id: string;
-	name: string;
+	label: string;
 	instanceId: string;
 }
 
@@ -111,7 +111,7 @@ export function groupEntitiesByDataset(
 		if (dataset === undefined) {
 			dataset = {
 				id: datasetId,
-				name: entity.collection.name,
+				label: entity.collection.label,
 				instanceId,
 			};
 			seenDatasets.set(datasetId, dataset);
