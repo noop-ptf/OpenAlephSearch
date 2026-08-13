@@ -8,6 +8,7 @@ export const EXCLUDED_SCHEMA_TYPES = new Set([
 	'Email',
 	'File',
 	'Folder',
+	'HyperText',
 	'Image',
 	'Page',
 	'Pages',

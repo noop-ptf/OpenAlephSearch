@@ -13,18 +13,10 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 	const buttonRef = useRef<HTMLDivElement>(null);
 	const popoverRef = useRef<HTMLDivElement>(null);
 	const iconRef = useRef<HTMLSpanElement>(null);
-	const clearIconRef = useRef<HTMLSpanElement>(null);
-	const selectIconRef = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
 		if (iconRef.current) {
 			setIcon(iconRef.current, 'list-filter');
-		}
-		if (clearIconRef.current) {
-			setIcon(clearIconRef.current, 'eraser');
-		}
-		if (selectIconRef.current) {
-			setIcon(selectIconRef.current, 'check-check');
 		}
 	}, []);
 
@@ -42,6 +34,8 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 		popover.showPopover();
 	};
 
+	const allSelected = Object.values(facets).every((value) => value);
+
 	return (
 		<>
 			<div
@@ -56,26 +50,31 @@ export function FacetFilter({ facets, facetLabels, handleToggle }: FacetFilterPr
 				<div className="menu-scroll openaleph-facet-list">
 					<div className="bases-toolbar-menu-container">
 						<div className="bases-toolbar-items">
-							<div className="suggestion-item openaleph-facet-clear">
-								<button className="openaleph-button"
-									onClick={() =>
+
+							<label
+								className="suggestion-item openaleph-facet-clear"
+								htmlFor="select-all-facets"
+							>
+								<input
+									type="checkbox"
+									id="select-all-facets"
+									checked={allSelected}
+									onChange={(event) => {
+										const value = event.target.checked;
 										Object.keys(facets).forEach((key) =>
-											handleToggle(key, false),
-										)
-									}
-								>
-									<span ref={clearIconRef} />
-								</button>
-								<button className="openaleph-button"
-									onClick={() =>
-										Object.keys(facets).forEach((key) =>
-											handleToggle(key, true),
-										)
-									}
-								>
-									<span ref={selectIconRef} />
-								</button>
-							</div>
+											handleToggle(key, value),
+										);
+									}}
+								/>
+								<div className="bases-toolbar-menu-item-info">
+									<div className="bases-toolbar-menu-item-name">
+										Select all
+									</div>
+								</div>
+							</label>
+
+							<hr className="openaleph-facet-divider" />
+
 							{Object.keys(facets).map((key) => (
 								<Facet
 									key={key}

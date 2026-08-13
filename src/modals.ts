@@ -72,4 +72,24 @@ export class ConfirmNoteModal extends Modal {
 		this.contentEl.empty();
 	}
 }
+
+export class LoadingModal extends Modal {
+	constructor(
+		app: App,
+		private message: string = 'Searching...',
+	) {
+		super(app);
+	}
+
+	onOpen() {
+		const { contentEl } = this;
+		contentEl.addClass('openaleph-loading-modal');
+		contentEl.createDiv({ cls: 'openaleph-spinner' });
+		contentEl.createEl('p', { text: this.message });
+	}
+
+	onClose() {
+		this.contentEl.empty();
+	}
+}
 /* eslint-enable obsidianmd/ui/sentence-case -- re-enable after modal UI strings */

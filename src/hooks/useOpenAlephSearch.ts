@@ -8,6 +8,7 @@ import {
 	type FacetState,
 	SCHEMA_TYPES,
 } from '../openaleph';
+import { LoadingModal } from '../modals';
 
 export function useOpenAlephSearch(
 	pluginSettings: OpenAlephPluginSettings,
@@ -16,7 +17,7 @@ export function useOpenAlephSearch(
 	const [searchResults, setSearchResults] =
 		useState<FederatedSearchResults>();
 	const [facets, setFacets] = useState<FacetState>(() =>
-		Object.fromEntries(SCHEMA_TYPES.map((k) => [k, false])),
+		Object.fromEntries(SCHEMA_TYPES.map((k) => [k, true])),
 	);
 
 	// TODO: get the actual labels from FtM
@@ -35,12 +36,16 @@ export function useOpenAlephSearch(
 			for (const [key, active] of Object.entries(facets)) {
 				if (active) search.filter(key);
 			}
+			const loadingModal = new LoadingModal(app);
+			loadingModal.open();
 			try {
 				const results = await clientRef.current.search(search);
 				setSearchResults(results);
 			} catch {
 				// eslint-disable-next-line obsidianmd/ui/sentence-case -- This is in proper sentence case.
 				new Notice('OpenAleph search failed. See log for details');
+			} finally {
+				loadingModal.close();
 			}
 		},
 		[facets],
