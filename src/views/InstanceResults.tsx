@@ -51,7 +51,7 @@ export function InstanceResults({
 								onClick={() => toggle(dataset.id)}
 							>
 								<div
-									className={`tree-item-icon collapse-icon ${collapsedIds.has(dataset.id) ? 'is-collapsed' : undefined}`}
+									className={`tree-item-icon collapse-icon ${collapsedIds.has(dataset.id) ? 'is-collapsed' : ''}`}
 								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
