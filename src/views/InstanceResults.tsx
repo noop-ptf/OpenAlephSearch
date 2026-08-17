@@ -4,6 +4,7 @@ import {
 	OpenAlephEntity,
 } from '../openaleph';
 import { useState } from 'react';
+import { setIcon } from 'obsidian';
 
 export function InstanceResults({
 	results,
@@ -15,6 +16,7 @@ export function InstanceResults({
 	loadMore: () => void;
 }) {
 	const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
+	const [instanceCollapsed, setInstanceCollapsed] = useState(false);
 
 	const toggle = (id: string) =>
 		setCollapsedIds((prev) => {
@@ -33,65 +35,67 @@ export function InstanceResults({
 
 	return (
 		<>
-			<div>{results.name}</div>
-			{[...results.results.entries()].map(([dataset, entities]) => {
-				const numEntities = entities.length;
-				return (
-					<div className="search-results-children" key={dataset.id}>
-						<div
-							style={{
-								width: '1px',
-								height: '0.1px',
-								marginBottom: '0px',
-							}}
-						></div>
-						<div className="tree-item search-result">
-							<div
-								className="tree-item-self search-result-file-title is-clickable"
-								onClick={() => toggle(dataset.id)}
-							>
-								<div
-									className={`tree-item-icon collapse-icon ${collapsedIds.has(dataset.id) ? 'is-collapsed' : ''}`}
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="24"
-										height="24"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										className="svg-icon right-triangle"
+			<div
+				className="tree-item-self search-result-file-title is-clickable"
+				onClick={() => setInstanceCollapsed((el) => !el)}
+			>
+				<div
+					className={`tree-item-icon collapse-icon ${instanceCollapsed ? 'is-collapsed' : ''}`}
+				>
+					<span
+						ref={(el) => {
+							if (el) setIcon(el, 'chevron-down');
+						}}
+					/>
+				</div>
+				<div className="tree-item-inner openaleph-instance-name">{results.name}</div>
+			</div>
+			{!instanceCollapsed && (
+				<>
+					{[...results.results.entries()].map(([dataset, entities]) => {
+						const numEntities = entities.length;
+						return (
+							<div className="search-results-children" key={dataset.id}>
+								<div className="tree-item search-result">
+									<div
+										className="tree-item-self search-result-file-title is-clickable"
+										onClick={() => toggle(dataset.id)}
 									>
-										<path d="M3 8L12 17L21 8"></path>
-									</svg>
-								</div>
-								<div className="tree-item-inner">
-									{dataset.label}
-								</div>
-								<div className="tree-item-flair-outer">
-									<span className="tree-item-flair">
-										{numEntities}
-									</span>
+										<div
+											className={`tree-item-icon collapse-icon ${collapsedIds.has(dataset.id) ? 'is-collapsed' : ''}`}
+										>
+											<span
+												ref={(el) => {
+													if (el) setIcon(el, 'chevron-down');
+												}}
+											/>
+										</div>
+										<div className="tree-item-inner">
+											{dataset.label}
+										</div>
+										<div className="tree-item-flair-outer">
+											<span className="tree-item-flair">
+												{numEntities}
+											</span>
+										</div>
+									</div>
+									{!collapsedIds.has(dataset.id)
+										? entities.map((entity) => (
+											<Entity
+												key={entity.id}
+												entity={entity}
+												writeNote={() => writeNote(entity)}
+											/>
+										))
+										: undefined}
 								</div>
 							</div>
-							{!collapsedIds.has(dataset.id)
-								? entities.map((entity) => (
-									<Entity
-										key={entity.id}
-										entity={entity}
-										writeNote={() => writeNote(entity)}
-									/>
-								))
-								: undefined}
-						</div>
-					</div>
-				);
-			})}
-			{results.next && (
-				<button onClick={() => loadMore()}>Load more</button>
+						);
+					})}
+					{results.next && (
+						<button onClick={() => loadMore()}>Load more</button>
+					)}
+				</>
 			)}
 		</>
 	);

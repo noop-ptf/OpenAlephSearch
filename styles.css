@@ -23,6 +23,7 @@
 
 .openaleph-results-total {
     font-size: 0.8em;
+    padding: 0 var(--size-4-2) var(--size-4-2);
 }
 
 .openaleph-result-title {
@@ -119,6 +120,7 @@
     padding: var(--size-2-3);
 }
 
+/* TODO - unify the spin animation CSS between this & settings */
 .openaleph-spinner {
     width: var(--size-4-8);
     height: var(--size-4-8);
@@ -132,4 +134,20 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+.tree-item-icon.collapse-icon {
+    transition: transform 0.15s ease;
+}
+
+.tree-item-icon.collapse-icon.is-collapsed {
+    transform: rotate(-90deg);
+}
+
+.openaleph-instance-name {
+    font-weight: var(--font-bold);
+    font-size: var(--font-ui-medium);
+    color: var(--text-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
