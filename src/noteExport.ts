@@ -6,6 +6,7 @@ export function yamlifyEntity(entity: OpenAlephEntity): string {
 	const flatEntity: Record<string, string | string[]> = {
 		schema: entity.schema,
 		id: entity.id,
+		link: entity.links.ui,
 	};
 	for (const [k, v] of Object.entries(entity.properties)) {
 		const strings = v.filter((x): x is string => typeof x === 'string');

@@ -33,6 +33,7 @@ interface Collection {
 interface Links {
 	self: string;
 	expand: string;
+	ui: string;
 	[key: string]: unknown;
 }
 
@@ -40,6 +41,7 @@ export interface OpenAlephEntity {
 	id: string;
 	caption: string;
 	schema: string;
+	link?: string;
 	// Values can be strings or nested entity objects for linked properties.
 	properties: Record<string, unknown[]>;
 	collection: Collection;
