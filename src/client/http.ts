@@ -13,7 +13,10 @@ export class HttpClient extends BaseClient {
 				Error(`Settings for ${instanceId} not properly configured`),
 			);
 		}
-		const headers: Record<string, string> = { 'User-Agent': 'alephclient' };
+		const headers: Record<string, string> = {
+			'User-Agent': 'alephclient',
+			Pragma: 'no-cache',
+		};
 		const apiKey = this.app.secretStorage.getSecret(settings.apiKeyName);
 		if (apiKey !== null) {
 			headers['Authorization'] = apiKey;
