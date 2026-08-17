@@ -1,4 +1,4 @@
-import { App } from 'obsidian';
+import { App, Notice } from 'obsidian';
 import { type Dispatch, type SetStateAction } from 'react';
 import { SearchEndpoint, type OpenAlephClient } from './endpoint';
 import {
@@ -45,16 +45,25 @@ export abstract class BaseClient implements OpenAlephClient {
 			this.settingsById,
 		)) {
 			if (settings.enabled) {
-				const results = await this.instanceSearch(endpoint, instanceId);
-				total += results.total;
-				resultsForInstance[instanceId] = {
-					name: settings.name,
-					results: groupEntitiesByDataset(
-						results.results,
+				try {
+					const results = await this.instanceSearch(
+						endpoint,
 						instanceId,
-					),
-					next: results.next,
-				};
+					);
+					total += results.total;
+					resultsForInstance[instanceId] = {
+						name: settings.name,
+						results: groupEntitiesByDataset(
+							results.results,
+							instanceId,
+						),
+						next: results.next,
+					};
+				} catch {
+					new Notice(
+						`Search failed for "${settings.name}". Skipping this instance.`,
+					);
+				}
 			}
 		}
 		return { total, resultsForInstance };
