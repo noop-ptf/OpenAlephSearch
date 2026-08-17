@@ -31,7 +31,7 @@ export async function writeNote(
 	plugin: OpenAlephPlugin,
 ): Promise<void> {
 	const path = entityImportPath(entity, ftmdFolder, instanceFolder);
-	const filePath = `${path}/${entity.caption}.md`;
+	const filePath = `${path}/${entity.caption.replaceAll(/[/\\:]/g, '')}.md`;
 	const fileContent = yamlifyEntity(entity);
 
 	plugin.app.vault.createFolder(path).catch(() => {
@@ -40,7 +40,9 @@ export async function writeNote(
 
 	const existingFile = plugin.app.vault.getFileByPath(filePath);
 	const targetFile = existingFile
-		? await plugin.app.vault.modify(existingFile, fileContent).then(() => existingFile)
+		? await plugin.app.vault
+				.modify(existingFile, fileContent)
+				.then(() => existingFile)
 		: await plugin.app.vault.create(filePath, fileContent);
 
 	const activeLeaf = plugin.app.workspace.getLeaf(false);
