@@ -35,7 +35,7 @@ If you already have the Beta Reviewers Auto-update Tester plug-in (affectionatel
 ### Install from source code
 
 1. `git clone https://github.com/noop-ptf/OpenAlephExplore.git`
-2. Make sure you have NodeJS installed, and that the version is at least v18 (`node --version`). If you don't have NodeJs installed, follow [the official instructions](https://nodejs.org/en/download)
+2. Make sure you have NodeJS installed, and that the version is at least v18 (`node --version`). If you don't have NodeJS installed, follow [the official instructions](https://nodejs.org/en/download)
 3. Navigate into the directory containing the source code and install the dependencies: `npm i`
 4. Run `npm run build`. This should produce three files: `main.js`, `styles.css`, `manifest.json`.
 5. Copy `main.js`, `styles.css`, `manifest.json` into your Obsidian vault directory, into the plug-ins directory (usually located at `VaultName/.obsidian/plugins/your-plugin-id/`).
