@@ -49,7 +49,7 @@ If you already have the Beta Reviewers Auto-update Tester plug-in (affectionatel
 
 ## Related projects
 
-[OpenAleph Explore](https://github.com/noop-ptf/OpenAlephExplore) allows users to use any note they have written to perform inverse search across multiple OpenAleph instanced, and then further refine the results with terms that are very closely correlated to them.
+[OpenAleph Explore](https://github.com/noop-ptf/OpenAlephExplore) allows users to use any note they have written to perform inverse search across multiple OpenAleph instances, and then further refine the results with terms that are very closely correlated to them.
 
 ## Social media
 
