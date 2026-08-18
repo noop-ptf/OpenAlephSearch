@@ -4,9 +4,11 @@ This Obsidian plug-in allows a user to search through many different OpenAleph i
 
 Most OpenAleph instances are configured to only allow a user to search when they are logged in. In the OpenAleph Search plug-in, a user can configure an OpenAleph instance to have an API key associated with it.
 
-Using this plug-in, a user can pull search results into their own Obsidian vault. Each result is a [Follow the Money](https://followthemoney.tech/) entity. The properties are rendered as [Markdown frontmatter](https://frontmatter.codes/docs/markdown) at the top of the note. A user can continue adding text to this note, as they would to any other Obsidian note.
+Using this plug-in, a user can pull search results into their own Obsidian vault. Each result is a [Follow the Money](https://followthemoney.tech/) entity. The properties are rendered as [Markdown frontmatter](https://frontmatter.codes/docs/markdown) at the top of the note. This note is saved in a separate directory, with a configurable name (by default, `followthemarkdown`).
 
-This plug-in was built in order to explore building tooling for investigators and researchers, that connects their tools for drafting text with OpenAleph instances.
+These Markdown files, containing Follow the Money entities, we have affectionately called "Follow the Markdown". They are meant to be treated as a source of information, not edited. They can be referenced in other notes, by using their title, in the WikiLinks notation: `[[Name of Enitty]]`.
+
+This plug-in was built in order to explore building tooling for investigators and researchers. The plug-in connects a well-known tool for drafting notes, and organizing knowledge (Obsidian) with OpenAleph instances (acting, here, as knowledge bases).
 
 ⚠️ This plug-in is in an Alpha stage. It _may_ still contain bugs. If you would like to report a bug or request a feature, please [open an Issue](https://codeberg.org/Noop/OpenAlephSearch/issues).
 
@@ -28,19 +30,21 @@ We are working to publish this plug-in among the [Community plug-ins](https://co
 
 ### Install using the BRAT plug-in
 
-If you already have the Beta Reviewers Auto-update Tester plug-in (affectionately called BRAT), you can add `https://github.com/noop-ptf/OpenAlephSearch.git` and select the latest version of this plug-in.
+If you already have the Beta Reviewers Auto-update Tester plug-in (called BRAT), you can add `https://github.com/noop-ptf/OpenAlephSearch.git` and select the latest version of this plug-in.
 
 <img src="assets/BRAT.png" alt="Screenshot demonstrating how to add the GitHub URL for the OpenAleph Search plug-in to BRAT" width="200">
 
 ### Install from source code
 
-1. `git clone https://github.com/noop-ptf/OpenAlephExplore.git`
-2. Make sure you have NodeJS installed, and that the version is at least v18 (`node --version`). If you don't have NodeJS installed, follow [the official instructions](https://nodejs.org/en/download)
-3. Navigate into the directory containing the source code and install the dependencies: `npm i`
+1. Make sure you have NodeJS installed, and that the version is at least v18 (`node --version`). If you don't have NodeJS installed, follow [the official instructions](https://nodejs.org/en/download)
+2. Navigate to the plug-ins directory of your Obsidian vault (usually located at `VaultName/.obsidian/plugins/your-plugin-id/`). Here, run `git clone https://github.com/noop-ptf/OpenAlephExplore.git`.
+3. Navigate into the newly-created directory, that contains the source code, and install the dependencies: `npm i`
 4. Run `npm run build`. This should produce three files: `main.js`, `styles.css`, `manifest.json`.
-5. Copy `main.js`, `styles.css`, `manifest.json` into your Obsidian vault directory, into the plug-ins directory (usually located at `VaultName/.obsidian/plugins/your-plugin-id/`).
+5. Open Obsidian, navigate to the **Settings** > **Community plugins** and refresh the list of plug-ins. OpenAleph Search should appear. Enable it.
 
 ## Tentative roadmap
+
+Here are future functionalities we are considering. If you want to suggest something else you would like to see added to this plug-in, feel warmly invited to open an Issue.
 
 - [ ] allow users to add properties to Follow the Money entities and push these back into an OpenAleph instance
 - [ ] the following Follow the Money entities are now excluded from search: Article, Audio, Email, File, Folder, HyperText, Image, Page, Pages, Table, Video, Workbook, because they have properties that contain lengthy (or binary data). Implement the exclusion of these properties and allow the user to import these as notes, for the metadata
@@ -53,7 +57,7 @@ If you already have the Beta Reviewers Auto-update Tester plug-in (affectionatel
 
 ## Social media
 
-The **noop** team is active on Mastodon, and will share news about releases, demos and other tidbits. You can also follow the individual developers: [zormit](https://chaos.social/@zormit) and [catileptic](https://chaos.social/@catileptic).
+The **noop** team is [active on Mastodon](https://chaos.social/@noop), and will share news about releases, demos and other tidbits. You can also follow the individual developers: [zormit](https://chaos.social/@zormit) and [catileptic](https://chaos.social/@catileptic).
 
 ## Sponsor
 
