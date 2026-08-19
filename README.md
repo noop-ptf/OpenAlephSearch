@@ -32,7 +32,7 @@ We are working to publish this plug-in among the [Community plug-ins](https://co
 
 If you already have the Beta Reviewers Auto-update Tester plug-in (called BRAT), you can add `https://github.com/noop-ptf/OpenAlephSearch.git` and select the latest version of this plug-in.
 
-<img src="assets/BRAT.png" alt="Screenshot demonstrating how to add the GitHub URL for the OpenAleph Search plug-in to BRAT" width="200">
+<p align="center"><img src="assets/BRAT.png" alt="Screenshot demonstrating how to add the GitHub URL for the OpenAleph Search plug-in to BRAT" width="500" height="1100"></p>
 
 ### Install from source code
 
