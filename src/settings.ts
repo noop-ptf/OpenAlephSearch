@@ -44,10 +44,6 @@ export class OpenAlephSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Configurate instances for federated search')
-			.setHeading();
-
-		new Setting(containerEl)
 			.setName('FollowTheMoney entity folder')
 			.setDesc(
 				'Importing a FollowTheMoney entity from an OpenAleph instance will save it here, as a Markdown note.',
