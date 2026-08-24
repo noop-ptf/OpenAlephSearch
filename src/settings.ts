@@ -29,134 +29,13 @@ export const DEFAULT_SETTINGS: OpenAlephPluginSettings = {
 	instances: [],
 };
 
-export class OpenAlephSettingTab extends PluginSettingTab {
-	plugin: OpenAlephPlugin;
-
-	constructor(app: App, plugin: OpenAlephPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	// 1.13.0+: Obsidian calls this and skips display().
-	// Controls auto-bind to this.plugin.settings[key].
-	getSettingDefinitions(): SettingDefinitionItem[] {
-		/* eslint-disable obsidianmd/no-unsupported-api -- Path B dual support:
-		 * getSettingDefinitions() is only ever invoked by Obsidian 1.13+ (older
-		 * versions call display() below instead), so SettingPage is declared
-		 * here, inside this method, rather than at module scope. That way its
-		 * `extends SettingPage` is only evaluated once we already know the API
-		 * exists — declaring it at module scope would crash on load on
-		 * Obsidian < 1.13, since `extends` is evaluated immediately. */
-		class InstancesPage extends SettingPage {
-			constructor(
-				private plugin: OpenAlephPlugin,
-				private renderInstance: (
-					containerEl: HTMLElement,
-					instance: OpenAlephInstanceSettings,
-					index: number,
-				) => void,
-			) {
-				super();
-				this.title = 'Instance Configuration';
-			}
-
-			display() {
-				let containerEl = this.containerEl;
-				containerEl.empty();
-
-				containerEl.createEl('p', {
-					text: 'Add the domain URL and API key for OpenAleph instances, in order to allow Obsidian to search across them simultaneously.',
-				});
-
-				this.plugin.settings.instances.forEach((instance, index) => {
-					this.renderInstance(containerEl, instance, index);
-				});
-
-				new Setting(containerEl).addButton((btn) =>
-					btn
-						.setButtonText('Add instance')
-						.setCta()
-						.onClick(async () => {
-							const instance: OpenAlephInstanceSettings = {
-								...DEFAULT_INSTANCE,
-								id: crypto.randomUUID(),
-							};
-							this.plugin.settings.instances.push(instance);
-							await this.plugin.saveSettings();
-							this.display();
-						}),
-				);
-			}
-		}
-		/* eslint-enable obsidianmd/no-unsupported-api -- Done with the 1.13+-only class */
-
-		return [
-			{
-				name: 'FollowTheMoney entity folder',
-				desc: 'Importing a FollowTheMoney entity from an OpenAleph instance will save it here, as a Markdown note.',
-				control: {
-					type: 'text',
-					key: 'importFolder',
-					placeholder: 'followthemarkdown',
-				},
-			},
-			{
-				type: 'page',
-				name: 'Instance Configuration',
-				page: () =>
-					new InstancesPage(
-						this.plugin,
-						// TODO: Maybe a bit ugly to pass renderInstance this way?
-						this.renderInstance.bind(this),
-					),
-			},
-		];
-	}
-
-	display(): void {
-		const { containerEl } = this;
-
-		containerEl.empty();
-
-		new Setting(containerEl)
-			.setName('FollowTheMoney entity folder')
-			.setDesc(
-				'Importing a FollowTheMoney entity from an OpenAleph instance will save it here, as a Markdown note.',
-			)
-			.addText((text) =>
-				text
-					.setPlaceholder('followthemarkdown')
-					.setValue(this.plugin.settings.importFolder)
-					.onChange(async (value) => {
-						this.plugin.settings.importFolder =
-							value || 'followthemarkdown';
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		containerEl.createEl('p', {
-			text: 'Add the domain URL and API key for OpenAleph instances, in order to allow Obsidian to search across them simultaneously.',
-		});
-
-		this.plugin.settings.instances.forEach((instance, index) => {
-			this.renderInstance(containerEl, instance, index);
-		});
-
-		new Setting(containerEl).addButton((btn) =>
-			btn
-				.setButtonText('Add instance')
-				.setCta()
-				.onClick(async () => {
-					const instance: OpenAlephInstanceSettings = {
-						...DEFAULT_INSTANCE,
-						id: crypto.randomUUID(),
-					};
-					this.plugin.settings.instances.push(instance);
-					await this.plugin.saveSettings();
-					// eslint-disable-next-line @typescript-eslint/no-deprecated -- Path B: this is the pre-1.13 fallback re-rendering itself, not a stray old call to replace with getSettingDefinitions()
-					this.display();
-				}),
-		);
+class InstancesPage extends SettingPage {
+	constructor(
+		private plugin: OpenAlephPlugin,
+		private app: App,
+	) {
+		super();
+		this.title = 'Instance Configuration';
 	}
 
 	private renderInstance(
@@ -164,7 +43,9 @@ export class OpenAlephSettingTab extends PluginSettingTab {
 		instance: OpenAlephInstanceSettings,
 		index: number,
 	): void {
-		const box = containerEl.createDiv({ cls: 'openaleph-source-box' });
+		const box = containerEl.createDiv({
+			cls: 'openaleph-source-box',
+		});
 
 		new Setting(box)
 			.setName(instance.name || `Instance ${index + 1}`)
@@ -182,7 +63,6 @@ export class OpenAlephSettingTab extends PluginSettingTab {
 					.onClick(async () => {
 						this.plugin.settings.instances.splice(index, 1);
 						await this.plugin.saveSettings();
-						// eslint-disable-next-line @typescript-eslint/no-deprecated -- Path B: pre-1.13 fallback re-rendering itself
 						this.display();
 					}),
 			)
@@ -264,6 +144,64 @@ export class OpenAlephSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}),
 		);
+	}
+
+	display() {
+		let containerEl = this.containerEl;
+		containerEl.empty();
+
+		containerEl.createEl('p', {
+			text: 'Add the domain URL and API key for OpenAleph instances, in order to allow Obsidian to search across them simultaneously.',
+		});
+
+		this.plugin.settings.instances.forEach((instance, index) => {
+			this.renderInstance(containerEl, instance, index);
+		});
+
+		new Setting(containerEl).addButton((btn) =>
+			btn
+				.setButtonText('Add instance')
+				.setCta()
+				.onClick(async () => {
+					const instance: OpenAlephInstanceSettings = {
+						...DEFAULT_INSTANCE,
+						id: crypto.randomUUID(),
+					};
+					this.plugin.settings.instances.push(instance);
+					await this.plugin.saveSettings();
+					this.display();
+				}),
+		);
+	}
+}
+
+export class OpenAlephSettingTab extends PluginSettingTab {
+	plugin: OpenAlephPlugin;
+
+	constructor(app: App, plugin: OpenAlephPlugin) {
+		super(app, plugin);
+		this.plugin = plugin;
+	}
+
+	// 1.13.0+: Obsidian calls this and skips display().
+	// Controls auto-bind to this.plugin.settings[key].
+	getSettingDefinitions(): SettingDefinitionItem[] {
+		return [
+			{
+				name: 'FollowTheMoney entity folder',
+				desc: 'Importing a FollowTheMoney entity from an OpenAleph instance will save it here, as a Markdown note.',
+				control: {
+					type: 'text',
+					key: 'importFolder',
+					placeholder: 'followthemarkdown',
+				},
+			},
+			{
+				type: 'page',
+				name: 'Instance Configuration',
+				page: () => new InstancesPage(this.plugin, this.app),
+			},
+		];
 	}
 }
 
