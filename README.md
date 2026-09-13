@@ -1,6 +1,6 @@
 # OpenAleph Search for Obsidian
 
-This Obsidian plug-in allows a user to search through many different OpenAleph instances simultaneously.
+This Obsidian plug-in allows a user to search through many different OpenAleph instances simultaneously. A brief [video tutorial](https://tube.flokinet.is/w/mQnLddM1DRxkAQY3SxoVZ4) walks you through the main workflow.
 
 Most OpenAleph instances are configured to only allow a user to search when they are logged in. In the OpenAleph Search plug-in, a user can configure an OpenAleph instance to have an API key associated with it.
 
