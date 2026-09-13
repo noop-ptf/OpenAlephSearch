@@ -42,7 +42,7 @@ export default class OpenAlephPlugin extends Plugin {
 		);
 
 		this.addCommand({
-			id: 'open-openaleph-search',
+			id: 'search-openaleph-instances',
 			name: 'Open search view',
 			callback: () => this.activateView(),
 		});
