@@ -33,11 +33,9 @@ export default class OpenAlephPlugin extends Plugin {
 
 		this.addRibbonIcon(
 			'binoculars',
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- This is in proper sentence case.
 			'OpenAleph Search',
 			(_evt: MouseEvent) => {
 				this.activateView().catch((err) => {
-					// eslint-disable-next-line obsidianmd/ui/sentence-case -- This is in proper sentence case.
 					new Notice('Could not open the OpenAleph Search plugin');
 				});
 			},

@@ -32,9 +32,14 @@ export default defineConfig(
 	{
 		files: ['**/*.ts', '**/*.tsx'],
 		rules: {
-			// Allow inline eslint-disable for legitimate cases (e.g. product names
-			// in sentence-case checks, intentional declarative-settings opt-out).
 			'eslint-comments/no-restricted-disable': 'off',
+			'obsidianmd/ui/sentence-case': [
+				'warn',
+				{
+					brands: ['OpenAleph', 'FollowTheMoney', 'Obsidian'],
+					mode: 'loose',
+				},
+			],
 		},
 	},
 );

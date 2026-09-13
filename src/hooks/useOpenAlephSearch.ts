@@ -42,7 +42,6 @@ export function useOpenAlephSearch(
 				const results = await clientRef.current.search(search);
 				setSearchResults(results);
 			} catch {
-				// eslint-disable-next-line obsidianmd/ui/sentence-case -- This is in proper sentence case.
 				new Notice('OpenAleph search failed. See log for details');
 			} finally {
 				loadingModal.close();

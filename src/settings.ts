@@ -1,5 +1,3 @@
-/* eslint-disable obsidianmd/ui/sentence-case -- This is all valid sentence case */
-
 import {
 	App,
 	Notice,
@@ -230,5 +228,3 @@ async function canConnect(instanceUrl: string, apiKey: string | null) {
 		return false;
 	}
 }
-
-/* eslint-enable obsidianmd/ui/sentence-case -- Done with weird sentnces */

@@ -1,5 +1,3 @@
-/* eslint-disable obsidianmd/ui/sentence-case -- This is all valid sentence case */
-
 import { App, Modal } from 'obsidian';
 
 export class ConfirmNoteModal extends Modal {
@@ -92,4 +90,3 @@ export class LoadingModal extends Modal {
 		this.contentEl.empty();
 	}
 }
-/* eslint-enable obsidianmd/ui/sentence-case -- re-enable after modal UI strings */

@@ -20,7 +20,6 @@ export class OpenAlephSearchView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		// eslint-disable-next-line obsidianmd/ui/sentence-case -- This is in proper sentence case.
 		return 'Federated OpenAleph search';
 	}
 
