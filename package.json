@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-openaleph-search",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Search OpenAleph instances and import entities as notes in Obsidian",
 	"main": "main.js",
 	"type": "module",
