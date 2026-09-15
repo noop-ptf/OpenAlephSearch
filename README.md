@@ -28,7 +28,7 @@ OpenAleph Search allows users to send a search query to multiple OpenAleph insta
 
 You must have [Obsidian](https://obsidian.md/) installed in order to use this plug-in.
 
-Your Obsidian app version must be equal or large than `1.11.4`. You can see the version by opening the **Settings** and navigating to the **General** section. If you have an older version of Obsidian, [upgrade to a more recent version](https://obsidian.md/help/updates).
+Your Obsidian app version must be equal or newer `1.13.0`. You can see the version by opening the **Settings** and navigating to the **General** section. If you have an older version of Obsidian, [upgrade to a more recent version](https://obsidian.md/help/updates).
 
 This plug-in can be installed directly via the [Obsidian Community plug-ins catalogue](https://community.obsidian.md/plugins/openaleph-search). Two other installation methods are detailed below.
 
