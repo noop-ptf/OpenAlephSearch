@@ -59,7 +59,12 @@ Here are future functionalities we are considering. If you want to suggest somet
 
 [OpenAleph Explore](https://github.com/noop-ptf/OpenAlephExplore) allows users to use any note they have written to perform inverse search across multiple OpenAleph instances, and then further refine the results with terms that are very closely correlated to them.
 
-## Social media
+## Team
+
+The noop team consists of:**
+- Anna Główczyńska (UI/UX designer)
+- Moritz Neeb (developer)
+- Sabina-Alexandra Ștefănescu (developer)
 
 The **noop** team is [active on Mastodon](https://chaos.social/@noop), and will share news about releases, demos and other tidbits. You can also follow the individual developers: [zormit](https://chaos.social/@zormit) and [catileptic](https://chaos.social/@catileptic).
 
