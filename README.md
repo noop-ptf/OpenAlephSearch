@@ -41,7 +41,7 @@ If you already have the Beta Reviewers Auto-update Tester plug-in (called BRAT),
 ### Install from source code
 
 1. Make sure you have NodeJS installed, and that the version is at least v18 (`node --version`). If you don't have NodeJS installed, follow [the official instructions](https://nodejs.org/en/download)
-2. Navigate to the plug-ins directory of your Obsidian vault (usually located at `VaultName/.obsidian/plugins/your-plugin-id/`). Here, run `git clone https://github.com/noop-ptf/OpenAlephExplore.git`.
+2. Navigate to the plug-ins directory of your Obsidian vault (usually located at `VaultName/.obsidian/plugins/your-plugin-id/`). Here, run `git clone https://github.com/noop-ptf/OpenAlephSearch.git`.
 3. Navigate into the newly-created directory, that contains the source code, and install the dependencies: `npm i`
 4. Run `npm run build`. This should produce three files: `main.js`, `styles.css`, `manifest.json`.
 5. Open Obsidian, navigate to the **Settings** > **Community plugins** and refresh the list of plug-ins. OpenAleph Search should appear. Enable it.
