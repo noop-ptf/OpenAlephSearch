@@ -28,7 +28,6 @@
 	},
 	"dependencies": {
 		"@opensanctions/followthemoney": "^4.10.0",
-		"react": "^19.2.8",
-		"react-dom": "^19.2.8"
+		"preact": "^11.0.0"
 	}
 }

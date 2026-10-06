@@ -11,6 +11,12 @@ if you want to view the source, please visit the github repository of this plugi
 const prod = process.argv[2] === 'production';
 
 const context = await esbuild.context({
+	alias: {
+		'react': 'preact/compat',
+		'react-dom/client': 'preact/compat/client',
+		'react-dom': 'preact/compat',
+		'react/jsx-runtime': 'preact/jsx-runtime',
+	},
 	banner: {
 		js: banner,
 	},
@@ -44,6 +50,7 @@ const context = await esbuild.context({
 		// 'USE_FAKE_API': prod ? 'false' : (process.env.FAKE_API === 'false' ? 'false' : 'true')
 		'USE_FAKE_API': 'false'
 	},
+	
 });
 
 if (prod) {
